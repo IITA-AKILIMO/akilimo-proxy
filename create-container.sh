@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock \
