@@ -44,6 +44,7 @@ services:
   adminer:
     image: adminer:4.6.3-standalone
     labels:
+      - traefik.enable=true
       - traefik.backend=adminer
       - traefik.frontend.rule=Host:db-admin.tsobu.co.ke
       - traefik.docker.network=web
