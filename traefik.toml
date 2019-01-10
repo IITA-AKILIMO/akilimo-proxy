@@ -1,11 +1,31 @@
-defaultEntryPoints = ["http","https"]
+defaultEntryPoints = ["http", "https"]
 
 [entryPoints]
-	[entryPoints.dashboard]
-		address = ":8080"
-		[entryPoints.dashboard.auth]
-			[entryPoints.dashboard.auth.basic]
-				users = ["admin:$apr1$uHwe2EeI$Z4B00WXncEWMN5EYuoK3V0"]
+  [entryPoints.dashboard]
+    address = ":8080"
+    [entryPoints.dashboard.auth]
+      [entryPoints.dashboard.auth.basic]
+        users = ["admin:$apr1$uHwe2EeI$Z4B00WXncEWMN5EYuoK3V0"]
+  [entryPoints.http]
+    address = ":80"
+      [entryPoints.http.redirect]
+        entryPoint = "https"
+  [entryPoints.https]
+    address = ":443"
+      [entryPoints.https.tls]
 
 [api]
-entryPoint="dashboard"
+entrypoint="dashboard"
+
+[acme]
+email = "sammy@tsobu.co.ke"
+storage = "acme.json"
+entryPoint = "https"
+onHostRule = true
+  [acme.httpChallenge]
+  entryPoint = "http"
+
+[docker]
+domain = "tsobu.co.ke"
+watch = true
+network = "web"
