@@ -27,5 +27,6 @@ onHostRule = true
 
 [docker]
 domain = "tsobu.co.ke"
+exposedbydefault = false
 watch = true
 network = "web"
