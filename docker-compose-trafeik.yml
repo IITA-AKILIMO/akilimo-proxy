@@ -11,8 +11,8 @@ services:
       - web
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.toml:/traefik.toml
-      - acme.json:/acme.json
+      - ${PWD}/traefik.toml:/traefik.toml
+      - ${PWD}/acme.json:/acme.json
     container_name: traefik
 
 networks:
