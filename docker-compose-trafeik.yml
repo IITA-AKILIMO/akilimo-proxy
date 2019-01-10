@@ -12,7 +12,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PWD}/conf/traefik.toml:/traefik.toml
-      #- ${PWD}/conf/acme.json:/acme.json
+      - ${PWD}/conf/acme.json:/acme.json
     container_name: traefik
 
 networks:
