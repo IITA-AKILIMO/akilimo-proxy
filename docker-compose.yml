@@ -12,17 +12,20 @@ services:
     container_name: spring-cropmanager
     restart: always
     labels:
+      - traefik.enable=true
       - traefik.backend=spring-cropmanager
       - traefik.frontend.rule=Host:api.tsobu.co.ke
       - traefik.docker.network=web
       - traefik.port=8098
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
   plumber-cropmanager:
     image: tsobu/plumber-cropmanager:latest
     container_name: plumber-cropmanager
     restart: always
     labels:
+      - traefik.enable=true
       - traefik.backend=plumber-cropmanager
       - traefik.frontend.rule=Host:api.tsobu.co.ke
       - traefik.docker.network=web

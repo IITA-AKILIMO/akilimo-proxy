@@ -1,0 +1,57 @@
+version: "3"
+
+services:
+  app:
+    image: my-docker-registry.com/my-awesome-app/app:latest
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+    networks:
+      - web
+      - default
+    expose:
+      - "9000"
+    labels:
+      - "traefik.docker.network=web"
+      - "traefik.enable=true"
+      - "traefik.basic.frontend.rule=Host:app.my-awesome-app.org"
+      - "traefik.basic.port=9000"
+      - "traefik.basic.protocol=http"
+      - "traefik.admin.frontend.rule=Host:admin-app.my-awesome-app.org"
+      - "traefik.admin.protocol=https"
+      - "traefik.admin.port=9443"
+
+  db:
+    image: my-docker-registry.com/back-end/5.7
+    restart: always
+
+  redis:
+    image: my-docker-registry.com/back-end/redis:4-alpine
+    restart: always
+
+  events:
+    image: my-docker-registry.com/my-awesome-app/events:latest
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: always
+    networks:
+      - web
+      - default
+    expose:
+      - "3000"
+    labels:
+      - "traefik.backend=my-awesome-app-events"
+      - "traefik.docker.network=web"
+      - "traefik.frontend.rule=Host:events.my-awesome-app.org"
+      - "traefik.enable=true"
+      - "traefik.port=3000"
+
+networks:
+  web:
+    external: true
