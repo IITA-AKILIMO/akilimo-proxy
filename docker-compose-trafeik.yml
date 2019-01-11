@@ -23,7 +23,7 @@ services:
     ports:
       - 8000:8000
     labels:
-      - "traefik.backend=api"
+      - "traefik.backend=plumber"
       - "traefik.frontend.rule=Host:plumber.tsobu.geek"
       - traefik.docker.network=web
       - traefik.port=8000
