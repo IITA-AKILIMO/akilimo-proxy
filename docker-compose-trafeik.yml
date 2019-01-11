@@ -18,11 +18,24 @@ services:
     networks:
       - web
       - internal
+  plumber-cropmanager:
+    image: tsobu/plumber-cropmanager:latest
+    ports:
+      - 8090:8090
+    labels:
+      - "traefik.backend=api"
+      - "traefik.frontend.rule=Host:api.tsobu.geek"
+      - traefik.docker.network=web
+      - traefik.port=8090
+    networks:
+      - web
+      - internal
   traefik:
     image: traefik:latest
     container_name: traefik
     labels:
       - "traefik.frontend.rule=Host:monitor.tsobu.geek"
+      - traefik.port=8080
     restart: always
     ports:
       - 80:80

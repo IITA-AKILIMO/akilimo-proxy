@@ -23,10 +23,10 @@ storage = "cropmanager.json"
 entryPoint = "https"
 onHostRule = true
   [acme.httpChallenge]
-  entryPoint = "http"
+    entryPoint = "http"
 
 [docker]
 domain = "tsobu.geek"
-#exposedbydefault = false
+exposedbydefault = false
 watch = true
 network = "web"

@@ -8,6 +8,6 @@ docker run -d \
   -p 443:443 \
   -l traefik.frontend.rule=Host:monitor.tsobu.geek \
   -l traefik.port=8080 \
-  --network proxy \
+  --network web \
   --name traefik \
   traefik:latest --docker
