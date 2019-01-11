@@ -1,56 +1,44 @@
 version: "3"
 
+services:
+  webca:
+    image: tsobu/spring-cropmanager:latest
+    #container_name: spring-cropmanager
+    restart: always
+    expose:
+      - 8098
+
+  webb:
+    image: tsobu/spring-cropmanager:latest
+    #container_name: spring-cropmanager
+    restart: always
+    expose:
+      - 8098
+
+  webc:
+    image: tsobu/spring-cropmanager:latest
+    #container_name: spring-cropmanager
+    restart: always
+    expose:
+      - 8098
+
+  haproxy:
+    image: hypriot/rpi-haproxy
+    volumes:
+      - ./conf/haproxy.cfg:/haproxy-override
+    links:
+      - weba
+      - webb
+      - webc
+    ports:
+      - "80:80"
+      - "70:70"
+      - "8098"
+
+    expose:
+      - "80"
+      - "70"
+      - "8098"
 networks:
   web:
-    external: true
-  internal:
-    external: false
-
-services:
-  spring-cropmanager:
-    image: tsobu/spring-cropmanager:latest
-    container_name: spring-cropmanager
-    restart: always
-    labels:
-      - traefik.enable=true
-      - traefik.backend=spring-cropmanager
-      - traefik.frontend.rule=Host:api.tsobu.co.ke
-      - traefik.docker.network=web
-      - traefik.port=8098
-    depends_on:
-      mysql:
-        condition: service_healthy
-  plumber-cropmanager:
-    image: tsobu/plumber-cropmanager:latest
-    container_name: plumber-cropmanager
-    restart: always
-    labels:
-      - traefik.enable=true
-      - traefik.backend=plumber-cropmanager
-      - traefik.frontend.rule=Host:api.tsobu.co.ke
-      - traefik.docker.network=web
-      - traefik.port=8000
-    networks:
-      - internal
-      - web
-  mysql:
-    image: mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD:
-    networks:
-      - internal
-    labels:
-      - traefik.enable=false
-  adminer:
-    image: adminer:4.6.3-standalone
-    labels:
-      - traefik.enable=true
-      - traefik.backend=adminer
-      - traefik.frontend.rule=Host:db-admin.tsobu.co.ke
-      - traefik.docker.network=web
-      - traefik.port=8080
-    networks:
-      - internal
-      - web
-    depends_on:
-      - mysql
+    driver: overlay
