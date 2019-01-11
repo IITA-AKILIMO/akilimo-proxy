@@ -15,18 +15,18 @@ defaultEntryPoints = ["http", "https"]
       [entryPoints.https.tls]
 
 [api]
-entrypoint="dashboard"
+entrypoint="api"
 
 [acme]
-email = "sammy@tsobu.co.ke"
-storage = "acme.json"
+email = "sammy@tsobu.geek"
+storage = "cropmanager.json"
 entryPoint = "https"
 onHostRule = true
   [acme.httpChallenge]
   entryPoint = "http"
 
 [docker]
-domain = "tsobu.co.ke"
-exposedbydefault = false
+domain = "tsobu.geek"
+#exposedbydefault = false
 watch = true
 network = "web"

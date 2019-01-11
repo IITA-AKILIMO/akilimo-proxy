@@ -1,9 +1,28 @@
 version: "3"
+networks:
+  web:
+    external: true
+  internal:
+    external: false
 
 services:
+  spring-cropmanager:
+    image: tsobu/spring-cropmanager:latest
+    ports:
+      - 8098:8098
+    labels:
+      - "traefik.backend=api"
+      - "traefik.frontend.rule=Host:api.tsobu.geek"
+      - traefik.docker.network=web
+      - traefik.port=8098
+    networks:
+      - web
+      - internal
   traefik:
-    image: traefik:1.5.4
+    image: traefik:latest
     container_name: traefik
+    labels:
+      - "traefik.frontend.rule=Host:monitor.tsobu.geek"
     restart: always
     ports:
       - 80:80
@@ -14,6 +33,3 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PWD}/conf/traefik.toml:/traefik.toml
       - ${PWD}/conf/cropmanager.json:/cropmanager.json
-networks:
-  web:
-    external: true
