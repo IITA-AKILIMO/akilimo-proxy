@@ -35,7 +35,7 @@ services:
     container_name: traefik
     labels:
       - "traefik.frontend.rule=Host:monitor.tsobu.geek"
-      - traefik.port=8080
+      - traefik.port=8000
     restart: always
     ports:
       - 80:80
