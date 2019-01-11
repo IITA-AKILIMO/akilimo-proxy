@@ -1,4 +1,4 @@
-version: '3'
+version: '2.1'
 
 services:
   kong-database:
@@ -26,8 +26,8 @@ services:
     command: kong migrations up
 
   kong:
-    #build: .
-    image: kong:latest
+    build: .
+    #image: kong:latest
     depends_on:
       kong-database:
         condition: service_healthy
