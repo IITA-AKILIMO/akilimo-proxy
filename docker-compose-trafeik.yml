@@ -21,12 +21,12 @@ services:
   plumber-cropmanager:
     image: tsobu/plumber-cropmanager:latest
     ports:
-      - 8090:8090
+      - 8000:8000
     labels:
       - "traefik.backend=api"
       - "traefik.frontend.rule=Host:plumber.tsobu.geek"
       - traefik.docker.network=web
-      - traefik.port=8090
+      - traefik.port=8000
     networks:
       - web
       - internal
