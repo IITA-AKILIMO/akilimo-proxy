@@ -1,4 +1,4 @@
-version: '2.1'
+version: '3'
 
 services:
   kong-database:
@@ -26,7 +26,8 @@ services:
     command: kong migrations up
 
   kong:
-    build: .
+    #build: .
+    image: kong:latest
     depends_on:
       kong-database:
         condition: service_healthy
@@ -45,7 +46,8 @@ services:
     ports:
       - "80:80"
     healthcheck:
-      test: ["CMD-SHELL", "curl -I -s -L http://127.0.0.1:80 || exit 1"]
+      #test: ["CMD-SHELL", "curl -I -s -L http://127.0.0.1:80 || exit 1"]
+      test: ["CMD", "curl", "-f", "http://kong:8001"]
       interval: 5s
 
   plumber-cropmanager:
