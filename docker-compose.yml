@@ -1,44 +1,33 @@
 version: "3"
 
 services:
-  webca:
+  spring:
     image: tsobu/spring-cropmanager:latest
     #container_name: spring-cropmanager
     restart: always
     expose:
       - 8098
 
-  webb:
-    image: tsobu/spring-cropmanager:latest
+  plumber:
+    image: tsobu/plumber-cropmanager:latest
     #container_name: spring-cropmanager
     restart: always
     expose:
-      - 8098
-
-  webc:
-    image: tsobu/spring-cropmanager:latest
-    #container_name: spring-cropmanager
-    restart: always
-    expose:
-      - 8098
+      - 8000
 
   haproxy:
     image: hypriot/rpi-haproxy
+    #image: haproxy
     volumes:
       - ./conf/haproxy.cfg:/haproxy-override
+      #- ./conf/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     links:
-      - weba
-      - webb
-      - webc
+      - spring
+      - plumber
     ports:
       - "80:80"
       - "70:70"
-      - "8098"
 
     expose:
       - "80"
       - "70"
-      - "8098"
-networks:
-  web:
-    driver: overlay
