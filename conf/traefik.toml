@@ -1,7 +1,3 @@
-debug = false
-
-logLevel = "ERROR"
-
 defaultEntryPoints = ["http", "https"]
 
 [entryPoints]
@@ -23,7 +19,7 @@ entrypoint="dashboard"
 
 [acme]
 email = "sammy@tsobu.co.ke"
-storage = "cropmanager.json"
+storage = "acme.json"
 entryPoint = "https"
 onHostRule = true
   [acme.httpChallenge]
@@ -31,6 +27,6 @@ onHostRule = true
 
 [docker]
 domain = "tsobu.co.ke"
-exposedbydefault = true
+exposedbydefault = false
 watch = true
 network = "web"

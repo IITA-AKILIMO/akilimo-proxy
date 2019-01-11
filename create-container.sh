@@ -1,5 +1,7 @@
 #!/bin/sh
 
+touch cropmanager.json && chmod 600 cropmanager.json
+
 docker run -d \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v $PWD/traefik.toml:/traefik.toml \

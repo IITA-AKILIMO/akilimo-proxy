@@ -7,20 +7,32 @@ networks:
     external: false
 
 services:
-  blog:
-    image: wordpress:4.9.8-apache
-    environment:
-      WORDPRESS_DB_PASSWORD:
+  spring-cropmanager:
+    image: tsobu/spring-cropmanager:latest
+    container_name: spring-cropmanager
+    restart: always
     labels:
-      - traefik.backend=blog
-      - traefik.frontend.rule=Host:blog.tsobu.co.ke
+      - traefik.enable=true
+      - traefik.backend=spring-cropmanager
+      - traefik.frontend.rule=Host:api.tsobu.co.ke
       - traefik.docker.network=web
-      - traefik.port=80
+      - traefik.port=8098
+    depends_on:
+      mysql:
+        condition: service_healthy
+  plumber-cropmanager:
+    image: tsobu/plumber-cropmanager:latest
+    container_name: plumber-cropmanager
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.backend=plumber-cropmanager
+      - traefik.frontend.rule=Host:api.tsobu.co.ke
+      - traefik.docker.network=web
+      - traefik.port=8000
     networks:
       - internal
       - web
-    depends_on:
-      - mysql
   mysql:
     image: mysql:5.7
     environment:
@@ -32,6 +44,7 @@ services:
   adminer:
     image: adminer:4.6.3-standalone
     labels:
+      - traefik.enable=true
       - traefik.backend=adminer
       - traefik.frontend.rule=Host:db-admin.tsobu.co.ke
       - traefik.docker.network=web
