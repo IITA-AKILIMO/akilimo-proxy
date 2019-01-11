@@ -24,7 +24,7 @@ services:
       - 8090:8090
     labels:
       - "traefik.backend=api"
-      - "traefik.frontend.rule=Host:api.tsobu.geek"
+      - "traefik.frontend.rule=Host:plumber.tsobu.geek"
       - traefik.docker.network=web
       - traefik.port=8090
     networks:
