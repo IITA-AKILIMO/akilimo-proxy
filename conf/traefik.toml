@@ -1,32 +1,34 @@
+debug = false
+logLevel = "ERROR"
+
 defaultEntryPoints = ["http", "https"]
 
+[web]
+# Port for the status/dashboard page
+address = ":8080"
+
 [entryPoints]
-  [entryPoints.dashboard]
-    address = ":8080"
-    [entryPoints.dashboard.auth]
-      [entryPoints.dashboard.auth.basic]
-        users = ["admin:$apr1$uHwe2EeI$Z4B00WXncEWMN5EYuoK3V0"]
-  [entryPoints.http]
+    [entryPoints.http]
     address = ":80"
-      [entryPoints.http.redirect]
+        [entryPoints.http.redirect]
         entryPoint = "https"
-  [entryPoints.https]
+
+    [entryPoints.https]
     address = ":443"
-      [entryPoints.https.tls]
+    [entryPoints.https.tls]
 
-[api]
-entrypoint="api"
-
-[acme]
-email = "sammy@tsobu.geek"
-storage = "cropmanager.json"
-entryPoint = "https"
-onHostRule = true
-  [acme.httpChallenge]
-    entryPoint = "http"
+[retry]
 
 [docker]
-domain = "tsobu.geek"
-exposedbydefault = false
+endpoint = "unix:///var/run/docker.sock"
+domain = "tsobu.com"
 watch = true
-network = "web"
+exposedByDefault = false
+
+[acme]
+email = "me@tsobu.com"
+storage = "acme.json"
+entryPoint = "https"
+onHostRule = true
+    [acme.httpChallenge]
+    entryPoint = "http"

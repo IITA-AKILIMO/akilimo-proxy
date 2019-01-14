@@ -1,48 +1,41 @@
-version: "3"
-networks:
-  web:
-    external: true
-  internal:
-    external: false
+version: '3'
 
 services:
-  spring-cropmanager:
-    image: tsobu/spring-cropmanager:latest
-    ports:
-      - 8098:8098
-    labels:
-      - "traefik.backend=api"
-      - "traefik.frontend.rule=Host:api.tsobu.geek"
-      - traefik.docker.network=web
-      - traefik.port=8098
+  gitea:
+    image: gitea/gitea:latest
+    restart: always
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
     networks:
       - web
-      - internal
-  plumber-cropmanager:
-    image: tsobu/plumber-cropmanager:latest
+    #volumes:
+    #  - ~/data/gitea:/data
     ports:
-      - 8000:8000
+      - 2221:22
     labels:
-      - "traefik.backend=plumber"
-      - "traefik.frontend.rule=Host:plumber.tsobu.geek"
-      - traefik.docker.network=web
-      - traefik.port=8000
-    networks:
-      - web
-      - internal
+      - "traefik.enable=true"
+      - "traefik.backend=spring"
+      - "traefik.docker.network=web"
+      - "traefik.frontend.rule=Host:spring.tsobu.com"
+      - "traefik.port=3000"
+
   traefik:
-    image: traefik:latest
-    container_name: traefik
-    labels:
-      - "traefik.frontend.rule=Host:monitor.tsobu.geek"
-      - traefik.port=8000
+    image: traefik
+    #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
     restart: always
     ports:
       - 80:80
       - 443:443
-    networks:
-      - web
+      - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PWD}/conf/traefik.toml:/traefik.toml
-      - ${PWD}/conf/cropmanager.json:/cropmanager.json
+      - ${PWD}/conf/acme.json:/acme.json
+    networks:
+      - web
+
+networks:
+  internal:
+  web:
+    external: true
