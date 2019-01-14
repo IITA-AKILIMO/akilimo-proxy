@@ -1,41 +1,28 @@
 version: '3'
 
 services:
-  gitea:
-    image: gitea/gitea:latest
-    restart: always
-    environment:
-      - USER_UID=1000
-      - USER_GID=1000
-    networks:
-      - web
-    #volumes:
-    #  - ~/data/gitea:/data
-    ports:
-      - 2221:22
-    labels:
-      - "traefik.enable=true"
-      - "traefik.backend=spring"
-      - "traefik.docker.network=web"
-      - "traefik.frontend.rule=Host:spring.tsobu.com"
-      - "traefik.port=3000"
-
   traefik:
     image: traefik
+    container_name: traefik
     #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
     restart: always
     ports:
       - 80:80
-      - 443:443
-      - 8080:8080
+     # - 443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${PWD}/conf/traefik.toml:/traefik.toml
+      - ${PWD}/conf/${CONFIG_FILE}:/traefik.toml
       - ${PWD}/conf/acme.json:/acme.json
+    labels:
+      - traefik.backend=monitor
+      - traefik.frontend.rule=Host:monitor.${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=${MONITOR_PORT}
     networks:
       - web
 
 networks:
   internal:
+    external: false
   web:
     external: true

@@ -1,13 +1,12 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-docker run -d \
+docker run \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  -v $PWD/conf/traefik.toml:/traefik.toml \
-  -v $PWD/conf/cropmanager.json:/cropmanager.json \
+  -v $PWD/conf/traefik.local.toml:/traefik.toml \
+  -v $PWD/conf/acme.json:/acme.json \
   -p 80:80 \
-  -p 443:443 \
-  -l traefik.frontend.rule=Host:monitor.tsobu.geek \
+  -l traefik.frontend.rule=Host:monitor.tsobu.com \
   -l traefik.port=8080 \
   --network web \
   --name traefik \
-  traefik:latest --docker
+  traefik:1.7.2-alpine

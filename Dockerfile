@@ -9,7 +9,7 @@ WORKDIR /src
 RUN npm install
 
 # make port 80 available outside of the image
-EXPOSE 8000
+EXPOSE 80
 
 # start node with the index.js file of our hello-world application
 CMD ["node", "index.js"]
