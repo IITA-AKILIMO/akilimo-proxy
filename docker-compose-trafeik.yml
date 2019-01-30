@@ -25,7 +25,7 @@ services:
     image: tsobu/spring-cropmanager:latest
     restart: always
     #ports:
-      - 8098:8098
+    #  - 8098:8098
     labels:
       - traefik.backend=spring-cropmanager
       - traefik.frontend.rule=Host:spring.${DOMAIN}
