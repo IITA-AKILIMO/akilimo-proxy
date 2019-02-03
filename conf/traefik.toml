@@ -22,7 +22,7 @@ defaultEntryPoints = ["http", "https"]
 entrypoint="dashboard"
 
 [acme]
-email = "sammy@tsobu.com"
+email = "sammy@tsobu.co.ke"
 storage = "acme.json"
 entryPoint = "https"
 onHostRule = true
@@ -30,7 +30,7 @@ onHostRule = true
   entryPoint = "http"
 
 [docker]
-domain = "tsobu.com"
+domain = "tsobu.co.ke"
 #exposedbydefault = true
 watch = true
 network = "web"
