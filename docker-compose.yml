@@ -22,6 +22,22 @@ services:
       - traefik.port=${MONITOR_PORT}
     networks:
       - web
+  mariadb:
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: changeme
+      MYSQL_DATABASE: mybb
+      MYSQL_USER: mybb
+      MYSQL_PASSWORD: changeme
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.DaemonName}}(image={{.ImageName}};name={{.Name}};id={{.ID}})"
+    networks:
+      - backend
+    restart: on-failure
+    volumes:
+      - ${PWD}/mariadb:/var/lib/mysql
   spring-cropmanager:
     container_name: spring.${DOMAIN}
     image: tsobu/spring-cropmanager:latest
