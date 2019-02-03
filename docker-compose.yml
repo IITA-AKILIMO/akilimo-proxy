@@ -4,6 +4,7 @@ services:
   traefik:
     image: traefik:1.7.8-alpine
     container_name: traefik
+    domainname: ${DOMAIN}
     #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
     restart: always
     ports:
@@ -14,6 +15,7 @@ services:
       - ${PWD}/conf/${CONFIG_FILE}:/traefik.toml
       - ${PWD}/conf/acme.json:/acme.json
     labels:
+      - traefik.enable=true
       - traefik.backend=monitor
       - traefik.frontend.rule=Host:monitor.${DOMAIN}
       - traefik.docker.network=web
@@ -24,13 +26,14 @@ services:
     container_name: spring.${DOMAIN}
     image: tsobu/spring-cropmanager:latest
     restart: always
-    #ports:
-    #  - 8098:8098
+    ports:
+      - 8098:8098
     labels:
+      - traefik.enable=true
       - traefik.backend=spring-cropmanager
       - traefik.frontend.rule=Host:spring.${DOMAIN}
       - traefik.docker.network=web
-      - traefik.port=8098
+      #- traefik.port=8098
     depends_on:
       - traefik
     networks:
@@ -39,18 +42,15 @@ services:
   plumber-cropmanager:
     container_name: plumber.${DOMAIN}
     image: tsobu/plumber-cropmanager:latest
-    #image: node:slim
-    deploy:
-      mode: replicated
-      replicas: 0
     restart: always
     ports:
       - 8000:8000
     labels:
+      - traefik.enable=true
       - traefik.backend=plumber
       - traefik.frontend.rule=Host:plumber.${DOMAIN}
       - traefik.docker.network=web
-      - traefik.port=8000
+      #- traefik.port=8000
     depends_on:
       - traefik
     networks:

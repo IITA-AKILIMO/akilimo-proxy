@@ -19,6 +19,6 @@ entrypoint="dashboard"
 
 [docker]
 domain = "tsobu.com"
-exposedbydefault = true
+exposedbydefault = false
 watch = true
 network = "web"
