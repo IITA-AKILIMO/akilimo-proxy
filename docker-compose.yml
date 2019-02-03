@@ -59,7 +59,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.backend=spring-cropmanager
-      - traefik.frontend.rule=Host:api.${DOMAIN}
+      - traefik.frontend.rule=Host:spring.${DOMAIN}
       - traefik.docker.network=web
       #- traefik.port=8098
     depends_on:
@@ -76,7 +76,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.backend=plumber
-      - traefik.frontend.rule=Host:api.${DOMAIN}
+      - traefik.frontend.rule=Host:plumber.${DOMAIN}
       - traefik.docker.network=web
       #- traefik.port=8000
     depends_on:
