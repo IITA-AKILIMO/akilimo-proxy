@@ -1,35 +1,63 @@
-version: "2"
+version: '3.3'
 
 services:
-  kong-database:
-    restart: on-failure
-    image: cassandra:2.2.5
-    container_name: kong-database
+  traefik:
+    image: traefik:1.7.8-alpine
+    container_name: traefik
+    #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
+    restart: always
     ports:
-      - "9042:9042"
+      - 80:80
+      #- 443:443
     volumes:
-      - "db-data:/var/lib/cassandra"
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/conf/${CONFIG_FILE}:/traefik.toml
+      - ${PWD}/conf/acme.json:/acme.json
+    labels:
+      - traefik.backend=monitor
+      - traefik.frontend.rule=Host:monitor.${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=${MONITOR_PORT}
+    networks:
+      - web
+  spring-cropmanager:
+    container_name: spring.${DOMAIN}
+    image: tsobu/spring-cropmanager:latest
+    restart: always
+    #ports:
+    #  - 8098:8098
+    labels:
+      - traefik.backend=spring-cropmanager
+      - traefik.frontend.rule=Host:spring.${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=8098
+    depends_on:
+      - traefik
+    networks:
+      - web
+      - internal
+  plumber-cropmanager:
+    container_name: plumber.${DOMAIN}
+    image: tsobu/plumber-cropmanager:latest
+    #image: node:slim
+    deploy:
+      mode: replicated
+      replicas: 0
+    restart: always
+    ports:
+      - 8000:8000
+    labels:
+      - traefik.backend=plumber
+      - traefik.frontend.rule=Host:plumber.${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=8000
+    depends_on:
+      - traefik
+    networks:
+      - web
+      - internal
+networks:
+  internal:
+    external: false
   web:
-    restart: on-failure
-    image: kong
-    container_name: kong
-    ports:
-      - "8000:8000"
-      - "8443:8443"
-      - "8001:8001"
-      - "7946:7946"
-      - "7946:7946/udp"
-    links:
-      - kong-database:kong-database
-    environment:
-      - DATABASE=cassandra
-    security_opt:
-      - label:seccomp:unconfined
-  ui:
-    restart: on-failure
-    image: pgbi/kong-dashboard
-    ports:
-      - "8080:8080"
-
-volumes:
-  db-data:
+    external: true
