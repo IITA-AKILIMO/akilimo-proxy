@@ -2,15 +2,20 @@ version: '3.3'
 
 services:
   db:
+    container_name: db.${DOMAIN}
     image: mysql:5.7
-    volumes:
-      - ${PWD}/database:/var/lib/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DB}
       #MYSQL_USER: wordpress
       #MYSQL_PASSWORD: wordpress
+    volumes:
+      - ${PWD}/database:/var/lib/mysql
+    labels:
+      - traefik.enable=true
+    networks:
+      - internal
   traefik:
     image: traefik:1.7.8-alpine
     container_name: traefik
