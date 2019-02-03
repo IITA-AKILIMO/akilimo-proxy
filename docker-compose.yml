@@ -1,6 +1,16 @@
 version: '3.3'
 
 services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - ${PWD}/database:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
+      #MYSQL_USER: wordpress
+      #MYSQL_PASSWORD: wordpress
   traefik:
     image: traefik:1.7.8-alpine
     container_name: traefik
@@ -22,22 +32,19 @@ services:
       - traefik.port=${MONITOR_PORT}
     networks:
       - web
-  mariadb:
-    image: mariadb:10.2
-    environment:
-      MYSQL_ROOT_PASSWORD: changeme
-      MYSQL_DATABASE: mybb
-      MYSQL_USER: mybb
-      MYSQL_PASSWORD: changeme
-    logging:
-      driver: syslog
-      options:
-        tag: "{{.DaemonName}}(image={{.ImageName}};name={{.Name}};id={{.ID}})"
+  adminer:
+    image: adminer:4.3.1-standalone
+    labels:
+      - traefik.enable=true
+      - traefik.backend=adminer
+      - traefik.frontend.rule=Host:db-admin.${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=8080
     networks:
-      - backend
-    restart: on-failure
-    volumes:
-      - ${PWD}/mariadb:/var/lib/mysql
+      - internal
+      - web
+    depends_on:
+      - db
   spring-cropmanager:
     container_name: spring.${DOMAIN}
     image: tsobu/spring-cropmanager:latest
