@@ -71,7 +71,7 @@ services:
       - internal
   plumber-cropmanager:
     container_name: plumber.${DOMAIN}
-    hodtname: plumber
+    hostname: plumber
     image: tsobu/plumber-cropmanager:latest
     restart: always
     ports:
