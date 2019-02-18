@@ -81,7 +81,6 @@ services:
       - traefik.backend=plumber
       - traefik.frontend.rule=Host:plumber.${DOMAIN}
       - traefik.docker.network=web
-      #- traefik.port=8000
     depends_on:
       - traefik
       - spring-cropmanager
