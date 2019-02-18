@@ -2,7 +2,7 @@ debug = false
 
 logLevel = "ERROR"
 
-defaultEntryPoints = ["http", "https"]
+defaultEntryPoints = ["http"]
 
 [entryPoints]
   [entryPoints.dashboard]
@@ -20,14 +20,6 @@ defaultEntryPoints = ["http", "https"]
 
 [api]
 entrypoint="dashboard"
-
-[acme]
-email = "sammy@tsobu.co.ke"
-storage = "acme.json"
-entryPoint = "https"
-onHostRule = true
-  [acme.httpChallenge]
-  entryPoint = "http"
 
 [docker]
 domain = "tsobu.co.ke"
