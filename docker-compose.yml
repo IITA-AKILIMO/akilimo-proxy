@@ -62,6 +62,8 @@ services:
       - traefik.frontend.rule=Host:spring.${DOMAIN}
       - traefik.docker.network=web
       #- traefik.port=8098
+    environment:
+      - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
     depends_on:
       - traefik
     networks:
