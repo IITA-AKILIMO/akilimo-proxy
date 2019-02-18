@@ -78,14 +78,14 @@ services:
       - 8000:8000
     labels:
       - traefik.enable=true
-      - traefik.backend=plumber
-      - traefik.frontend.rule=Host:plumber.${DOMAIN}
-      - traefik.docker.network=web
+      #- traefik.backend=plumber
+      #- traefik.frontend.rule=Host:plumber.${DOMAIN}
+      #- traefik.docker.network=web
     depends_on:
       - traefik
       - spring-cropmanager
     networks:
-      - web
+      #- web
       - internal
 networks:
   internal:
