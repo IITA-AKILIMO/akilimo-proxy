@@ -1,0 +1,24 @@
+debug = true
+
+logLevel = "INFO"
+
+defaultEntryPoints = ["http"]
+
+[entryPoints]
+  [entryPoints.dashboard]
+    address = ":8080"
+    [entryPoints.dashboard.auth]
+      [entryPoints.dashboard.auth.basic]
+        users = ["admin:$apr1$uHwe2EeI$Z4B00WXncEWMN5EYuoK3V0"]
+  [entryPoints.http]
+    address = ":80"
+
+[api]
+entrypoint="dashboard"
+
+
+[docker]
+domain = "tsobu.co.ke"
+exposedbydefault = true
+watch = true
+network = "web"

@@ -81,6 +81,7 @@ services:
       #- traefik.port=8000
     depends_on:
       - traefik
+      - spring-cropmanager
     networks:
       - web
       - internal
