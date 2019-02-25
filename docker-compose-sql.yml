@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  sqlserver:
+    hostname: sqlserver
+    image: mcr.microsoft.com/mssql/server:latest
+    restart: on-failure
+    ports:
+      - 1433:1433
+    volumes:
+      - ms-sqlserver-data:/var/opt/mssql
+      #- /mssql:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=${ACCEPT_EULA}
+      - SA_PASSWORD=${SA_PASSWORD}
+      - MSSQL_PID=${MSSQL_PID}
+    networks:
+      - web
+networks:
+  web:
+    external: true
+
+volumes:
+  ms-sqlserver-data:
+    driver: local
