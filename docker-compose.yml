@@ -84,7 +84,7 @@ services:
       - traefik
       - spring-cropmanager
     networks:
-      #- web
+      - web
       - internal
 networks:
   internal:
