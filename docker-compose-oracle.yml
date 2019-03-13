@@ -10,6 +10,7 @@ services:
       - 5500:5500
       #- 49161:1521
       - 5000:5000
+      - 8888:8080
       - 1521:1521
     environment:
       - ORACLE_ALLOW_REMOTE=true
@@ -19,6 +20,7 @@ services:
       - USER_LANGUAGE=en
       - USER_REGION=us
       - USER_COUNTRY=en
+      - SCHEMAS=SAMMY
     volumes:
       - .oradata:/opt/oracle/oradata
       #- .oradata:/u01/app/oracle-product
