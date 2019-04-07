@@ -86,6 +86,22 @@ services:
     networks:
       - web
       - internal
+  rancher:
+    container_name: rancher.${DOMAIN}
+    image: rancher/rancher:stable
+    restart: always
+    ports:
+      - 8070:80
+    labels:
+      - traefik.enable=true
+      - traefik.backend=rancher
+      - traefik.frontend.rule=Host:rancher.${DOMAIN}
+      - traefik.docker.network=web
+    depends_on:
+      - traefik
+    networks:
+      - web
+      - internal
 networks:
   internal:
     external: false
