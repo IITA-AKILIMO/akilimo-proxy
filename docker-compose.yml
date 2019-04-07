@@ -100,7 +100,7 @@ services:
     depends_on:
       - traefik
     networks:
-      - web
+      #- web
       - internal
 networks:
   internal:
