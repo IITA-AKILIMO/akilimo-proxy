@@ -71,7 +71,7 @@ services:
       - internal
   plumber-cropmanager:
     container_name: plumber.${DOMAIN}
-    image: tsobu/plumber-cropmanager:latest
+    image: tsobu/plumber-cropmanager:release-2.0
     restart: always
     ports:
       - 8000:8000
