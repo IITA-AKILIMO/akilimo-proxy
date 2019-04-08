@@ -97,6 +97,8 @@ services:
       - traefik.frontend.rule=Host:netdata.${DOMAIN}
       - traefik.docker.network=web
       - traefik.frontend.auth.basic=${USER_PASS}
+    environment:
+      - PGID=${DOCKER_GROUP}
     cap_add:
       - SYS_PTRACE
     security_opt:
