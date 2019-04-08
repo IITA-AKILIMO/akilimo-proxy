@@ -96,11 +96,11 @@ services:
       - traefik.enable=true
       - traefik.backend=rancher
       - traefik.frontend.rule=Host:rancher.${DOMAIN}
-      - traefik.docker.network=internal
+      - traefik.docker.network=web
     depends_on:
       - traefik
     networks:
-      #- web
+      - web
       - internal
 networks:
   internal:
