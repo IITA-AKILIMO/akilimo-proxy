@@ -102,6 +102,9 @@ services:
       - apparmor:unconfined
     depends_on:
       - traefik
+    networks:
+      - web
+      - internal
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
