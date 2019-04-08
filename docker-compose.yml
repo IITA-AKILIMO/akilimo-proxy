@@ -91,7 +91,7 @@ services:
     image: rancher/rancher:stable
     restart: always
     ports:
-      - 80:8070
+      - 8070:80
     labels:
       - traefik.enable=true
       - traefik.backend=rancher
