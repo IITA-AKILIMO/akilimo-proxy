@@ -86,15 +86,15 @@ services:
     networks:
       - web
       - internal
-  rancher:
+  netdata:
     image: netdata/netdata
-    hostname: rancher.${DOMAIN}
+    hostname: netdata.${DOMAIN}
     ports:
       - 19999:19999
     labels:
       - traefik.enable=true
       - traefik.backend=plumber
-      - traefik.frontend.rule=Host:rancher.${DOMAIN}
+      - traefik.frontend.rule=Host:netdata.${DOMAIN}
       - traefik.docker.network=web
     cap_add:
       - SYS_PTRACE
