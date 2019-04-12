@@ -26,8 +26,8 @@ services:
     image: rancher/rancher
     restart: unless-stopped
     ports:
-      - 80:8900
-      - 443:44301
+      - 8900:80
+      - 44301:443
     labels:
       - traefik.enable=true
       - traefik.backend=rancher
