@@ -1,0 +1,45 @@
+version: '3.3'
+
+services:
+  traefik:
+    image: traefik:1.7.8-alpine
+    container_name: traefik
+    domainname: ${DOMAIN}
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/conf/${RANCHER_CONFIG_FILE}:/traefik.toml
+      - ${PWD}/conf/acme.json:/acme.json
+    labels:
+      - traefik.enable=true
+      - traefik.backend=monitor
+      - traefik.frontend.rule=Host:monitor.${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=${MONITOR_PORT}
+    networks:
+      - web
+  rancher:
+    container_name: rancher.${DOMAIN}
+    image: rancher/rancher
+    restart: unless-stopped
+    ports:
+      - 80:8900
+      - 443:44301
+    labels:
+      - traefik.enable=true
+      - traefik.backend=rancher
+      - traefik.frontend.rule=Host:rancher.${DOMAIN}
+      - traefik.docker.network=web
+    depends_on:
+      - traefik
+    networks:
+      - web
+      - internal
+networks:
+  internal:
+    external: false
+  web:
+    external: true
