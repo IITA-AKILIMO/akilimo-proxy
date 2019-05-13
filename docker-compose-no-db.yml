@@ -1,21 +1,6 @@
 version: '3.3'
 
 services:
-  db:
-    container_name: db.${DOMAIN}
-    image: mysql:5.7
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DB}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    volumes:
-      - ${PWD}/database:/var/lib/mysql
-    labels:
-      - traefik.enable=true
-    networks:
-      - internal
   traefik:
     image: traefik:1.7.8-alpine
     container_name: traefik
@@ -37,19 +22,6 @@ services:
       - traefik.port=${MONITOR_PORT}
     networks:
       - web
-  #adminer:
-  #  image: adminer:4.3.1-standalone
-  #  labels:
-  #    - traefik.enable=true
-  #    - traefik.backend=adminer
-  #    - traefik.frontend.rule=Host:db-admin.${DOMAIN}
-  #    - traefik.docker.network=web
-  #    - traefik.port=8080
-  #  networks:
-  #    - internal
-  #    - web
-  #  depends_on:
-  #    - db
   spring-cropmanager:
     container_name: spring.${DOMAIN}
     image: tsobu/spring-cropmanager:latest
@@ -63,9 +35,13 @@ services:
       - traefik.docker.network=web
       #- traefik.port=8098
     environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - CROP_DATABASE_URL=${CROP_DATABASE_URL}
+      - CROP_DATABASE_USERNAME=${CROP_DATABASE_USERNAME}
+      - CROP_DATABASE_PASSWORD=${CROP_DATABASE_PASSWORD}
       - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
-    depends_on:
-      - traefik
+    #depends_on:
+    #  - traefik
     networks:
       - web
       - internal
@@ -81,9 +57,9 @@ services:
       - traefik.backend=plumber
       - traefik.frontend.rule=Host:plumber.${DOMAIN}
       - traefik.docker.network=web
-    depends_on:
-      - traefik
-      - spring-cropmanager
+    #depends_on:
+      #- traefik
+    #  - spring-cropmanager
     networks:
       - web
       - internal
