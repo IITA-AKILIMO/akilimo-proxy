@@ -11,12 +11,16 @@ services:
     networks:
       - web
     restart: on-failure
+    ports:
+      - 3306:3306
     volumes:
       - ${PWD}/mariadb:/var/lib/mysql
   akilimo-spring:
     container_name: akilimo-spring
     image: tsobu/spring-cropmanager:latest
     restart: always
+    links:
+      - akilimo-db:akilimo-db
     ports:
       - 8098:8098
     extra_hosts:
