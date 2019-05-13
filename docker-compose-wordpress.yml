@@ -7,6 +7,7 @@ services:
       - db_data:/var/lib/mysql
     restart: always
     environment:
+      MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: sammy
       MYSQL_DATABASE: sammy
       MYSQL_USER: sammy
