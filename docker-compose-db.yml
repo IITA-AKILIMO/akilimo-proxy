@@ -31,8 +31,8 @@ services:
       - CROP_DATABASE_USERNAME=${CROP_DATABASE_USERNAME}
       - CROP_DATABASE_PASSWORD=${CROP_DATABASE_PASSWORD}
       - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
-    #depends_on:
-    #  - traefik
+    depends_on:
+      - akilimo-db
     networks:
       - web
       - internal
@@ -43,8 +43,8 @@ services:
     restart: always
     ports:
       - 8000:8000
-    depends_on:
-      - akilimo-db
+    #depends_on:
+    #  - akilimo-db
     networks:
       - web
       - internal
