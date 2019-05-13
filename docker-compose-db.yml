@@ -1,6 +1,22 @@
 version: '3.3'
 
 services:
+  akilimo-db:
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${CROP_DATABASE_PASSWORD}
+      MYSQL_USER: ${CROP_DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+    logging:
+      driver: syslog
+      options:
+        tag: "{{.DaemonName}}(image={{.ImageName}};name={{.Name}};id={{.ID}})"
+    networks:
+      - web
+    restart: on-failure
+    volumes:
+      - ${PWD}/mariadb:/var/lib/mysql
   akilimo-spring:
     container_name: akilimo-spring
     image: tsobu/spring-cropmanager:latest
