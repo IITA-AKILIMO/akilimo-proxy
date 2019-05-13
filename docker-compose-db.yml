@@ -4,6 +4,7 @@ services:
   akilimo-db:
     image: mariadb:10.2
     environment:
+      YSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
       MYSQL_DATABASE: ${CROP_DATABASE_PASSWORD}
       MYSQL_USER: ${CROP_DATABASE_USERNAME}
@@ -19,12 +20,8 @@ services:
     container_name: akilimo-spring
     image: tsobu/spring-cropmanager:latest
     restart: always
-    links:
-      - akilimo-db:akilimo-db
     ports:
       - 8098:8098
-    extra_hosts:
-      - dockerhost:${DOCKERHOST}
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - CROP_DATABASE_URL=${CROP_DATABASE_URL}
