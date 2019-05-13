@@ -6,7 +6,7 @@ services:
     environment:
       YSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
-      MYSQL_DATABASE: ${CROP_DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${CROP_DATABASE}
       MYSQL_USER: ${CROP_DATABASE_USERNAME}
       MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
     networks:
@@ -14,8 +14,8 @@ services:
     restart: on-failure
     ports:
       - 3306:3306
-    volumes:
-      - ${PWD}/mariadb:/var/lib/mysql
+    #volumes:
+    #  - ${PWD}/mariadb:/var/lib/mysql
   akilimo-spring:
     container_name: akilimo-spring
     image: tsobu/spring-cropmanager:latest
