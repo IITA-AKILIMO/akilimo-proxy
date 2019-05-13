@@ -39,7 +39,7 @@ services:
   akilimo-r:
     container_name: akilimo-r
     #image: tsobu/plumber-cropmanager:release-2.0
-    image: tsobu/plumber-cropmanager:lastest
+    image: tsobu/plumber-cropmanager:latest
     restart: always
     ports:
       - 8000:8000
