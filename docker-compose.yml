@@ -84,6 +84,7 @@ services:
       - CROP_DATABASE_USERNAME=${CROP_DATABASE_USERNAME}
       - CROP_DATABASE_PASSWORD=${CROP_DATABASE_PASSWORD}
       - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
+      - VERIFY_CERT=${VERIFY_CERT}
     depends_on:
       - traefik
       - plumber
