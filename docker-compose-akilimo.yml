@@ -64,6 +64,9 @@ services:
     image: tvalladon/sqlbuddy
     labels:
       - traefik.enable=true
+    networks:
+      - web
+      - internal
     depends_on:
       - db
       - traefik
