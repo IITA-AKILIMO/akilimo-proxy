@@ -25,6 +25,8 @@ services:
     environment:
       MYSQL_USERNAME: ${CROP_DATABASE_USERNAME}
       MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
+    depends_on:
+      - db
   akilimo-spring:
     container_name: akilimo-spring
     image: tsobu/spring-cropmanager:latest
@@ -39,6 +41,7 @@ services:
       - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
     depends_on:
       - db
+      - phpmyadmin
     networks:
       - web
       - internal
