@@ -40,8 +40,8 @@ services:
       - web
   adminer:
     container_name: adminer
-#    image: adminer:4.3.1-standalone
-    image: adminer
+    image: adminer:4.3.1-standalone
+    #image: adminer
     environment:
       ADMINER_DEFAULT_DB_DRIVER: mysql
       ADMINER_DEFAULT_DB_HOST: db
@@ -52,7 +52,7 @@ services:
     links:
       - db:mysql
     ports:
-      - 8080:8080
+      - 8080:8099
     labels:
       - traefik.enable=true
       - traefik.backend=adminer
@@ -64,18 +64,6 @@ services:
     depends_on:
       - traefik
       - db
-#  sqlbuddy:
-#    image: tvalladon/sqlbuddy
-#    labels:
-#      - traefik.enable=true
-#    ports:
-#      - 9000:80
-#    networks:
-#      - web
-#      - internal
-#    depends_on:
-#      - db
-#      - traefik
   spring:
     container_name: spring
     image: tsobu/spring-cropmanager:latest
