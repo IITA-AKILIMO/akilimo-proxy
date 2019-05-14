@@ -48,7 +48,7 @@ services:
 #      ADMINER_DESIGN: nette
 #      ADMINER_PLUGINS: tables-filter tinymce
     ports:
-      - 80:8080
+      - 8080:9669
     labels:
       - traefik.enable=true
     networks:
