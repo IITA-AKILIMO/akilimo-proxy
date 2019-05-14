@@ -40,10 +40,10 @@ services:
       - web
   adminer:
     container_name: adminer
-    image: adminer:latest
+    image: adminer:4.3.1-standalone
     environment:
       ADMINER_DEFAULT_DB_DRIVER: mysql
-      ADMINER_DEFAULT_DB_HOST: mariadb
+      ADMINER_DEFAULT_DB_HOST: db
       ADMINER_DEFAULT_DB_NAME: ${CROP_DATABASE}
       ADMINER_DESIGN: nette
       ADMINER_PLUGINS: tables-filter tinymce
@@ -52,7 +52,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.backend=adminer
-      - traefik.frontend.rule=Host:db-admin.${DOMAIN}
+      - traefik.frontend.rule=Host:adminer.${DOMAIN}
       - traefik.docker.network=web
     networks:
       - internal
@@ -67,7 +67,7 @@ services:
       - 8098:8098
     labels:
       - traefik.enable=true
-      - traefik.backend=spring-cropmanager
+      - traefik.backend=spring
       - traefik.frontend.rule=Host:spring.${DOMAIN}
       - traefik.docker.network=web
       #- traefik.port=8098
