@@ -47,8 +47,8 @@ services:
       ADMINER_DEFAULT_DB_NAME: ${CROP_DATABASE}
       ADMINER_DESIGN: nette
       ADMINER_PLUGINS: tables-filter tinymce
-    ports:
-      - 8080:9000
+    #ports:
+    #  - 8080:8080
     labels:
       - traefik.enable=true
       - traefik.backend=adminer
