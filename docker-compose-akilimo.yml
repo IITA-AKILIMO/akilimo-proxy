@@ -55,11 +55,12 @@ services:
       - 8080:8080
     labels:
       - traefik.enable=true
-      - traefik.backend=monitor
+      - traefik.backend=adminer
       - traefik.frontend.rule=Host:adminer.${DOMAIN}
       - traefik.docker.network=web
     networks:
       - web
+      - internal
     depends_on:
       - traefik
       - db
