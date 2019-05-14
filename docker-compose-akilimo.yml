@@ -52,7 +52,7 @@ services:
     depends_on:
       - db
   spring:
-    container_name: spring.${DOMAIN}
+    container_name: spring
     image: tsobu/spring-cropmanager:latest
     restart: always
     ports:
@@ -71,7 +71,7 @@ services:
       - web
       - internal
   plumber:
-    container_name: plumber.${DOMAIN}
+    container_name: plumber
     image: tsobu/plumber-cropmanager:release-2.0
     #image: tsobu/plumber-cropmanager:production
     restart: always
