@@ -17,14 +17,14 @@ services:
     #volumes:
     #  - ${PWD}/mariadb:/var/lib/mysql
   phpmyadmin:
-  image: phpmyadmin/phpmyadmin
-  links:
-    - db
-  environment:
-    PMA_HOST: db
-    PMA_PORT: 3306
-  ports:
-    - '8080:8080'
+    image: phpmyadmin/phpmyadmin
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    ports:
+      - '8080:8080'
   akilimo-spring:
     container_name: akilimo-spring
     image: tsobu/spring-cropmanager:latest
