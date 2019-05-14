@@ -64,6 +64,8 @@ services:
     image: tvalladon/sqlbuddy
     labels:
       - traefik.enable=true
+    ports:
+      - 80:9000
     networks:
       - web
       - internal
