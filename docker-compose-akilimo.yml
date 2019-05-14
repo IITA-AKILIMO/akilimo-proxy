@@ -39,6 +39,7 @@ services:
     networks:
       - web
   adminer:
+    container_name: adminer
     image: adminer:latest
     environment:
       ADMINER_DEFAULT_DB_DRIVER: mysql
@@ -53,7 +54,6 @@ services:
       - traefik.backend=adminer
       - traefik.frontend.rule=Host:db-admin.${DOMAIN}
       - traefik.docker.network=web
-      - traefik.port=${MONITOR_PORT}
     networks:
       - internal
       - web
