@@ -2,14 +2,15 @@ version: '3.3'
 
 services:
   db:
-    container_name: db.${DOMAIN}
-    image: mysql:5.7
+    image: mariadb:10.2
+    container_name: db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DB}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${CROP_DATABASE}
+      MYSQL_USER: ${CROP_DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
     volumes:
       - ${PWD}/database:/var/lib/mysql
     labels:
@@ -63,8 +64,8 @@ services:
     depends_on:
       - traefik
       - db
-  spring-cropmanager:
-    container_name: spring.${DOMAIN}
+  spring:
+    container_name: spring
     image: tsobu/spring-cropmanager:latest
     restart: always
     ports:
@@ -79,11 +80,12 @@ services:
       - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
     depends_on:
       - traefik
+      - plumber
     networks:
       - web
       - internal
-  plumber-cropmanager:
-    container_name: plumber.${DOMAIN}
+  plumber:
+    container_name: plumber
     #image: tsobu/plumber-cropmanager:release-2.0
     image: tsobu/plumber-cropmanager:production
     restart: always
@@ -96,7 +98,6 @@ services:
       - traefik.docker.network=web
     depends_on:
       - traefik
-      - spring-cropmanager
     networks:
       - web
       - internal
