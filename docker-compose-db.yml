@@ -18,8 +18,6 @@ services:
     #  - ${PWD}/mariadb:/var/lib/mysql
   phpmyadmin:
     image: corbinu/docker-phpmyadmin
-    links:
-      - db:db
     ports:
       - 8181:8181
     environment:
