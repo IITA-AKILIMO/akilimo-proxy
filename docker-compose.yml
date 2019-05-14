@@ -77,6 +77,10 @@ services:
       - traefik.docker.network=web
       #- traefik.port=8098
     environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - CROP_DATABASE_URL=${CROP_DATABASE_URL}
+      - CROP_DATABASE_USERNAME=${CROP_DATABASE_USERNAME}
+      - CROP_DATABASE_PASSWORD=${CROP_DATABASE_PASSWORD}
       - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
     depends_on:
       - traefik
