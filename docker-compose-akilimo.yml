@@ -1,0 +1,122 @@
+version: '3.3'
+
+services:
+  db:
+    container_name: db.${DOMAIN}
+      image: mariadb:10.2
+    restart: always
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${CROP_DATABASE}
+      MYSQL_USER: ${CROP_DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+    volumes:
+      - ${PWD}/database:/var/lib/mysql
+    labels:
+      - traefik.enable=true
+    networks:
+      - internal
+  traefik:
+    image: traefik:1.7.8-alpine
+    container_name: traefik
+    domainname: ${DOMAIN}
+    #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/conf/${CONFIG_FILE}:/traefik.toml
+      - ${PWD}/conf/acme.json:/acme.json
+    labels:
+      - traefik.enable=true
+      - traefik.backend=monitor
+      - traefik.frontend.rule=Host:monitor.${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=${MONITOR_PORT}
+    networks:
+      - web
+  adminer:
+    image: adminer:4.3.1-standalone
+    labels:
+      - traefik.enable=true
+      - traefik.backend=adminer
+      - traefik.frontend.rule=Host:db-admin.${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=8080
+    networks:
+      - internal
+      - web
+    depends_on:
+      - db
+  spring:
+    container_name: spring.${DOMAIN}
+    image: tsobu/spring-cropmanager:latest
+    restart: always
+    ports:
+      - 8098:8098
+    labels:
+      - traefik.enable=true
+      - traefik.backend=spring-cropmanager
+      - traefik.frontend.rule=Host:spring.${DOMAIN}
+      - traefik.docker.network=web
+      #- traefik.port=8098
+    environment:
+      - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
+    depends_on:
+      - traefik
+    networks:
+      - web
+      - internal
+  plumber:
+    container_name: plumber.${DOMAIN}
+    image: tsobu/plumber-cropmanager:release-2.0
+    #image: tsobu/plumber-cropmanager:production
+    restart: always
+    ports:
+      - 8000:8000
+    labels:
+      - traefik.enable=true
+      - traefik.backend=plumber
+      - traefik.frontend.rule=Host:plumber.${DOMAIN}
+      - traefik.docker.network=web
+    depends_on:
+      - db
+      - traefik
+      - spring
+    networks:
+      - web
+      - internal
+#  netdata:
+#    image: netdata/netdata
+#    hostname: netdata.${DOMAIN}
+#    ports:
+#      - 19999:19999
+#    labels:
+#      - traefik.enable=true
+#      - traefik.backend=netdata
+#      - traefik.frontend.rule=Host:netdata.${DOMAIN}
+#      - traefik.docker.network=web
+#      - traefik.frontend.auth.basic=${USER_PASS}
+#    environment:
+#      - PGID=${DOCKER_GROUP}
+#    cap_add:
+#      - SYS_PTRACE
+#    security_opt:
+#      - apparmor:unconfined
+#    depends_on:
+#      - traefik
+#    networks:
+#      - web
+#      - internal
+#    volumes:
+#      - /proc:/host/proc:ro
+#      - /sys:/host/sys:ro
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+networks:
+  internal:
+    external: false
+  web:
+    external: true
