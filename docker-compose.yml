@@ -37,19 +37,32 @@ services:
       - traefik.port=${MONITOR_PORT}
     networks:
       - web
-  #adminer:
-  #  image: adminer:4.3.1-standalone
-  #  labels:
-  #    - traefik.enable=true
-  #    - traefik.backend=adminer
-  #    - traefik.frontend.rule=Host:db-admin.${DOMAIN}
-  #    - traefik.docker.network=web
-  #    - traefik.port=8080
-  #  networks:
-  #    - internal
-  #    - web
-  #  depends_on:
-  #    - db
+  adminer:
+    container_name: adminer
+    #image: adminer:4.3.1-standalone
+    image: adminer
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: mysql
+      ADMINER_DEFAULT_DB_HOST: db
+      ADMINER_DEFAULT_DB_NAME: ${CROP_DATABASE}
+      ADMINER_DESIGN: nette
+      ADMINER_PLUGINS: tables-filter tinymce
+    restart: always
+    links:
+      - db:mysql
+    ports:
+      - 8080:8080
+    labels:
+      - traefik.enable=true
+      - traefik.backend=adminer
+      - traefik.frontend.rule=Host:adminer.${DOMAIN}
+      - traefik.docker.network=web
+    networks:
+      - web
+      - internal
+    depends_on:
+      - traefik
+      - db
   spring-cropmanager:
     container_name: spring.${DOMAIN}
     image: tsobu/spring-cropmanager:latest
