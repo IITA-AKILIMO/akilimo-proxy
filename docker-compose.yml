@@ -68,6 +68,8 @@ services:
     container_name: spring
     image: tsobu/spring-cropmanager:latest
     restart: always
+    links:
+      - plumber:plumber
     ports:
       - 8098:8098
     labels:
