@@ -1,7 +1,7 @@
 version: '3.3'
 
 services:
-  akilimo-db:
+  db:
     image: mariadb:10.2
     environment:
       MYSQL_ROOT_HOST: "%"
@@ -29,7 +29,7 @@ services:
       - CROP_DATABASE_PASSWORD=${CROP_DATABASE_PASSWORD}
       - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
     depends_on:
-      - akilimo-db
+      - db
     networks:
       - web
       - internal
