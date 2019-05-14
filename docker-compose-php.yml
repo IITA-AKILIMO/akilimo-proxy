@@ -1,31 +1,33 @@
-mysql:
-  build: mysql
-  environment:
-    MYSQL_ROOT_HOST: "%"
-    MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
-    MYSQL_DATABASE: ${CROP_DATABASE}
-    MYSQL_USER: ${CROP_DATABASE_USERNAME}
-    MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
-  volumes_from:
-    - datastore
-phpmyadmin:
-  image: phpmyadmin/phpmyadmin
-  links:
-    - mysql
-  environment:
-    PMA_HOST: mysql
-    PMA_PORT: 3306
-  ports:
-    - '8080:80'
-datastore:
-  image: busybox
-  volumes:
-    - /var/lib/mysql
-php:
-  build: php
-  ports:
-    - '80:80'
-  links:
-    - mysql
-  volumes:
-    - ./php/www:/srv/www
+version: "3"
+services:
+  mysql:
+    build: mysql
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${CROP_DATABASE}
+      MYSQL_USER: ${CROP_DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+    volumes_from:
+      - datastore
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - '8080:80'
+  datastore:
+    image: busybox
+    volumes:
+      - /var/lib/mysql
+  php:
+    build: php
+    ports:
+      - '80:80'
+    links:
+      - mysql
+    volumes:
+      - ./php/www:/srv/www
