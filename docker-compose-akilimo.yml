@@ -58,6 +58,7 @@ services:
       - internal
       - web
     depends_on:
+      - traefik
       - db
   spring:
     container_name: spring
