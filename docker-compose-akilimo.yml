@@ -52,7 +52,7 @@ services:
     links:
       - db:mysql
     ports:
-      - 8080:8099
+      - 8080:8080
     labels:
       - traefik.enable=true
       - traefik.backend=adminer
