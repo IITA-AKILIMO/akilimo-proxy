@@ -40,19 +40,20 @@ services:
       - web
   adminer:
     container_name: adminer
-    image: adminer:4.3.1-standalone
+#    image: adminer:4.3.1-standalone
+    image: adminer
 #    environment:
 #      ADMINER_DEFAULT_DB_DRIVER: mysql
 #      ADMINER_DEFAULT_DB_HOST: db
 #      ADMINER_DEFAULT_DB_NAME: ${CROP_DATABASE}
 #      ADMINER_DESIGN: nette
 #      ADMINER_PLUGINS: tables-filter tinymce
+    restart: always
     ports:
-      - 8080:9669
+      - 8080:8080
     labels:
       - traefik.enable=true
     networks:
-      - internal
       - web
     depends_on:
       - traefik
