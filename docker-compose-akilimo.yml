@@ -65,7 +65,7 @@ services:
     labels:
       - traefik.enable=true
     ports:
-      - 80:9000
+      - 9000:80
     networks:
       - web
       - internal
