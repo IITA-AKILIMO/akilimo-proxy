@@ -42,12 +42,12 @@ services:
     container_name: adminer
 #    image: adminer:4.3.1-standalone
     image: adminer
-#    environment:
-#      ADMINER_DEFAULT_DB_DRIVER: mysql
-#      ADMINER_DEFAULT_DB_HOST: db
-#      ADMINER_DEFAULT_DB_NAME: ${CROP_DATABASE}
-#      ADMINER_DESIGN: nette
-#      ADMINER_PLUGINS: tables-filter tinymce
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: mysql
+      ADMINER_DEFAULT_DB_HOST: db
+      ADMINER_DEFAULT_DB_NAME: ${CROP_DATABASE}
+      ADMINER_DESIGN: nette
+      ADMINER_PLUGINS: tables-filter tinymce
     restart: always
     links:
       - db:mysql
