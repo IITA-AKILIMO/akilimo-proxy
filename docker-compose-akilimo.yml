@@ -49,6 +49,8 @@ services:
 #      ADMINER_DESIGN: nette
 #      ADMINER_PLUGINS: tables-filter tinymce
     restart: always
+    links:
+      - db:mysql
     ports:
       - 8080:8080
     labels:
