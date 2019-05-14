@@ -3,7 +3,7 @@ version: '3.3'
 services:
   db:
     image: mariadb:10.2
-    container_name: db.${DOMAIN}
+    container_name: db
     restart: always
     environment:
       MYSQL_ROOT_HOST: "%"
@@ -45,7 +45,7 @@ services:
       - traefik.backend=adminer
       - traefik.frontend.rule=Host:db-admin.${DOMAIN}
       - traefik.docker.network=web
-      - traefik.port=8080
+      - traefik.port=${MONITOR_PORT}
     networks:
       - internal
       - web
