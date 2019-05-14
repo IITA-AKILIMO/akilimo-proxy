@@ -16,6 +16,15 @@ services:
       - 3306:3306
     #volumes:
     #  - ${PWD}/mariadb:/var/lib/mysql
+  phpmyadmin:
+    image: corbinu/docker-phpmyadmin
+    links:
+      - db:mysql
+    ports:
+      - 8181:8181
+    environment:
+      MYSQL_USERNAME: ${CROP_DATABASE_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
   akilimo-spring:
     container_name: akilimo-spring
     image: tsobu/spring-cropmanager:latest
