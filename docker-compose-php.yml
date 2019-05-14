@@ -8,8 +8,6 @@ services:
       MYSQL_DATABASE: ${CROP_DATABASE}
       MYSQL_USER: ${CROP_DATABASE_USERNAME}
       MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
-    volumes_from:
-      - datastore
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     links:
@@ -19,10 +17,6 @@ services:
       PMA_PORT: 3306
     ports:
       - '8080:80'
-  datastore:
-    image: busybox
-    volumes:
-      - /var/lib/mysql
   php:
     build: php
     ports:
