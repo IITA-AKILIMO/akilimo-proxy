@@ -19,7 +19,7 @@ services:
   phpmyadmin:
     image: corbinu/docker-phpmyadmin
     links:
-      - db:mysql
+      - db:db
     ports:
       - 8181:8181
     environment:
