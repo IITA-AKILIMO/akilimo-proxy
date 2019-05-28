@@ -85,6 +85,8 @@ services:
       - VERIFY_CERT=${VERIFY_CERT}
     depends_on:
       - traefik
+      - db
+      - plumber
     networks:
       - web
       - internal
@@ -101,7 +103,6 @@ services:
       - traefik.frontend.rule=Host:plumber.${DOMAIN}
       - traefik.docker.network=web
     depends_on:
-      - db
       - traefik
       - spring
     networks:
