@@ -120,7 +120,6 @@ services:
       - traefik.docker.network=web
     depends_on:
       - traefik
-      - spring
     networks:
       - web
       - internal
