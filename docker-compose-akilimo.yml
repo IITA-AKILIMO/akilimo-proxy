@@ -65,7 +65,7 @@ services:
       - traefik
       - db
   spring:
-    container_name: spring
+    #container_name: spring
     #image: tsobu/spring-cropmanager:latest
     image: iita/acai-akilimo-api:latest
     restart: always
