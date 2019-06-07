@@ -70,7 +70,7 @@ services:
     image: iita/acai-akilimo-api:latest
     restart: always
     ports:
-      - "8098-8200":8098
+      - "8098-8200":"8098:8200"
     labels:
       - traefik.enable=true
       - traefik.backend=spring
