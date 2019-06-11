@@ -70,7 +70,8 @@ services:
     image: iita/acai-akilimo-api:latest
     restart: always
     ports:
-      - "8098-8200:8098"
+      #- "8098-8200:8098"
+      - 8098:8098
     labels:
       - traefik.enable=true
       - traefik.backend=spring
@@ -109,7 +110,8 @@ services:
   plumber:
     container_name: plumber
     #image: tsobu/plumber-cropmanager:release-2.0
-    image: tsobu/plumber-cropmanager:latest
+    #image: tsobu/plumber-cropmanager:latest
+    image: iita/akilimo-compute:latest
     restart: always
     ports:
       - 8000:8000
