@@ -121,9 +121,9 @@ services:
       - traefik.frontend.rule=Host:plumber.${DOMAIN}
       - traefik.docker.network=web
     volumes:
-      - ${PWD}/akilimo_recommendation:${PWD}/akilimo_recommendation
-      - ${PWD}/gisdata:${PWD}/gisdata
-      - ${PWD}/currentyield:${PWD}/currentyield
+      - ${R_ROOT}/akilimo_recommendation:${PWD}/akilimo_recommendation
+      - ${R_ROOT}/gisdata:${PWD}/gisdata
+      - ${R_ROOT}/currentyield:${PWD}/currentyield
     depends_on:
       - traefik
     networks:
