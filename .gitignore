@@ -1,4 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
 .idea
+docker-plumber
 .env
 database/*
 .log
+ACAI_sample_processing/*
+gisdata/*
+currentyield/*
+install_pkg.R

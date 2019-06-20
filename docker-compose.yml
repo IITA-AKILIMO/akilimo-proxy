@@ -4,7 +4,7 @@ services:
   db:
     image: mariadb:10.2
     container_name: db
-    restart: always
+    restart: on-failure
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
@@ -48,7 +48,7 @@ services:
       ADMINER_DEFAULT_DB_NAME: ${CROP_DATABASE}
       ADMINER_DESIGN: nette
       ADMINER_PLUGINS: tables-filter tinymce
-    restart: always
+    restart: on-failure
     links:
       - db:mysql
     ports:
@@ -68,35 +68,51 @@ services:
     container_name: spring
     #image: tsobu/spring-cropmanager:latest
     image: iita/acai-akilimo-api:latest
-    restart: always
-    links:
-      - plumber:plumber
+    restart: on-failure
     ports:
+      #- "8098-8200:8098"
       - 8098:8098
     labels:
       - traefik.enable=true
-      - traefik.backend=spring-cropmanager
+      - traefik.backend=spring
       - traefik.frontend.rule=Host:spring.${DOMAIN}
       - traefik.docker.network=web
-      #- traefik.port=8098
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - CROP_DATABASE_URL=${CROP_DATABASE_URL}
       - CROP_DATABASE_USERNAME=${CROP_DATABASE_USERNAME}
       - CROP_DATABASE_PASSWORD=${CROP_DATABASE_PASSWORD}
       - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
+      - PLUMBER_FR=${PLUMBER_FR}
+      - PLUMBER_PP=${PLUMBER_PP}
+      - PLUMBER_IC=${PLUMBER_IC}
+      - PLUMBER_SP=${PLUMBER_SP}
+      - PLUMBER_HS=${PLUMBER_HS}
       - VERIFY_CERT=${VERIFY_CERT}
+      - MS_WEBHOOK=${MS_WEBHOOK}
+      - MS_TEST_NUMBERS=${MS_TEST_NUMBERS}
+      - INFOBIP_ENDPOINT=${INFOBIP_ENDPOINT}
+      - INFOBIP_SENDER=${INFOBIP_SENDER}
+      - INFOBIP_USER_NAME=${INFOBIP_USER_NAME}
+      - INFOBIP_USER_PASS=${INFOBIP_USER_PASS}
+      - INFOBIP_AUTH_KEY=${INFOBIP_AUTH_KEY}
+      - PLIVO_ENDPOINT=${PLIVO_ENDPOINT}
+      - PLIVO_AUTH_KEY=${PLIVO_AUTH_KEY}
+      - PLIVO_AUTH_ID=${PLIVO_AUTH_ID}
+      - PLIVO_SENDER=${PLIVO_SENDER}
     depends_on:
       - traefik
+      - db
       - plumber
     networks:
       - web
       - internal
   plumber:
     container_name: plumber
-    image: tsobu/plumber-cropmanager:release-2.0
-    #image: tsobu/plumber-cropmanager:production
-    restart: always
+    #image: tsobu/plumber-cropmanager:release-2.0
+    #image: tsobu/plumber-cropmanager:latest
+    image: iita/akilimo-compute:latest
+    restart: on-failure
     ports:
       - 8000:8000
     labels:
@@ -104,6 +120,10 @@ services:
       - traefik.backend=plumber
       - traefik.frontend.rule=Host:plumber.${DOMAIN}
       - traefik.docker.network=web
+    volumes:
+      - ${PWD}/akilimo_recommendation:${PWD}/akilimo_recommendation
+      - ${PWD}/gisdata:${PWD}/gisdata
+      - ${PWD}/currentyield:${PWD}/currentyield
     depends_on:
       - traefik
     networks:
@@ -112,6 +132,7 @@ services:
   netdata:
     image: netdata/netdata
     hostname: netdata.${DOMAIN}
+    restart: on-failure
     ports:
       - 19999:19999
     labels:
@@ -135,6 +156,7 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /gisdata
 networks:
   internal:
     external: false
