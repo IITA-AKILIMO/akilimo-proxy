@@ -173,9 +173,9 @@ services:
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
-#      WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
+      WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
 #      WORDPRESS_DB_NAME: ${CROP_DATABASE}
-#      WORDPRESS_TABLE_PREFIX: "wrdp"
+      WORDPRESS_TABLE_PREFIX: "wrdp"
     links:
       - db:mysql
     labels:
