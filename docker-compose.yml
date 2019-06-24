@@ -180,7 +180,7 @@ services:
       - db:mysql
     labels:
       - traefik.backend=blog
-      - traefik.frontend.rule=Host:spring.${DOMAIN}
+      - traefik.frontend.rule=Host:${DOMAIN}
       - traefik.docker.network=web
       - traefik.port=80
     networks:
