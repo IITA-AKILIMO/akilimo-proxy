@@ -66,7 +66,6 @@ services:
       - db
   spring:
     container_name: spring
-    #image: tsobu/spring-cropmanager:latest
     image: iita/acai-akilimo-api:latest
     restart: on-failure
     ports:
@@ -111,8 +110,8 @@ services:
     container_name: plumber
     #image: tsobu/plumber-cropmanager:release-2.0
     #image: tsobu/plumber-cropmanager:latest
-    #image: iita/akilimo-compute:latest
-    image: iita/akilimo-compute:full
+    image: iita/akilimo-compute:latest
+    #    image: iita/akilimo-compute:full
     restart: on-failure
     ports:
       - 8000:8000
@@ -121,12 +120,12 @@ services:
       - traefik.backend=plumber
       - traefik.frontend.rule=Host:plumber.${DOMAIN}
       - traefik.docker.network=web
-#    volumes:
-#      - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
-#      - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
-#      - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
-#    depends_on:
-#      - traefik
+    volumes:
+      - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
+      - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
+      - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
+    depends_on:
+      - traefik
     networks:
       - web
       - internal
@@ -158,6 +157,14 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+  rstudio:
+    container_name: ocpu
+    image: opencpu/rstudio
+    ports:
+      - 8004:8004
+    networks:
+      - web
+      - internal
 networks:
   internal:
     external: false
