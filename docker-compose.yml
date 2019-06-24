@@ -1,6 +1,28 @@
 version: '3.3'
 
 services:
+  traefik:
+    image: traefik:1.7.8-alpine
+    container_name: traefik
+    domainname: ${DOMAIN}
+    #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/conf/${CONFIG_FILE}:/traefik.toml
+      - ${PWD}/conf/acme.json:/acme.json
+    labels:
+      - traefik.enable=true
+      - traefik.backend=monitor
+      - traefik.frontend.rule=Host:monitor.${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=${MONITOR_PORT}
+      - traefik.docker.domain=${DOMAIN}
+    networks:
+      - web
   db:
     image: mariadb:10.2
     container_name: db
@@ -32,28 +54,6 @@ services:
     depends_on:
       - db
       - traefik
-  traefik:
-    image: traefik:1.7.8-alpine
-    container_name: traefik
-    domainname: ${DOMAIN}
-    #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ${PWD}/conf/${CONFIG_FILE}:/traefik.toml
-      - ${PWD}/conf/acme.json:/acme.json
-    labels:
-      - traefik.enable=true
-      - traefik.backend=monitor
-      - traefik.frontend.rule=Host:monitor.${DOMAIN}
-      - traefik.docker.network=web
-      - traefik.port=${MONITOR_PORT}
-      - traefik.docker.domain=${DOMAIN}
-    networks:
-      - web
   adminer:
     container_name: adminer
     #image: adminer:4.3.1-standalone
