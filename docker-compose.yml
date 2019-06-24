@@ -125,8 +125,8 @@ services:
 #      - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
 #      - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
 #      - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
-    depends_on:
-      - traefik
+#    depends_on:
+#      - traefik
     networks:
       - web
       - internal
