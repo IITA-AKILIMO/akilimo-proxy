@@ -30,6 +30,7 @@ services:
     networks:
       - web
   blog:
+    container_name: blog
     image: wordpress:4.9.8-apache
     restart: always
     environment:
