@@ -44,7 +44,8 @@ services:
     depends_on:
       - db
   db:
-    image: mysql:5.7
+    image: mariadb:10.2
+    container_name: db
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
