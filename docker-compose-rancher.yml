@@ -10,6 +10,9 @@ services:
       - 443:443
     volumes:
       - /opt/rancher:/var/lib/rancher
+      - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
+      - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
+      - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
 #    networks:
 #      - web
 #      - internal
