@@ -159,7 +159,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
   ocpu:
     container_name: ocpu
-    image: opencpu/rstudio
+    image: opencpu/base
     ports:
       - 8004:8004
     networks:
