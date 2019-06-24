@@ -57,6 +57,8 @@ services:
       MYSQL_DATABASE: ${CROP_DATABASE}
       MYSQL_USER: ${CROP_DATABASE_USERNAME}
       MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+    links:
+      - db:mysql
     networks:
       - internal
     labels:
