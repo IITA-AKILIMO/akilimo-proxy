@@ -17,6 +17,20 @@ services:
       - traefik.enable=true
     networks:
       - internal
+  blog:
+    image: wordpress:4.9.8-apache
+    environment:
+      WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
+    labels:
+      - traefik.backend=blog
+      - traefik.frontend.rule=Host:${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=80
+    networks:
+      - internal
+      - web
+    depends_on:
+      - db
   traefik:
     image: traefik:1.7.8-alpine
     container_name: traefik
