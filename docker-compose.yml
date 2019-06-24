@@ -74,7 +74,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.backend=spring
-      - traefik.frontend.rule=Host:spring.${DOMAIN}
+      - traefik.frontend.rule=Host:springs.${DOMAIN}
       - traefik.docker.network=web
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
