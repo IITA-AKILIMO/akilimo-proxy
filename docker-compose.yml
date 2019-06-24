@@ -21,6 +21,7 @@ services:
     image: traefik:1.7.8-alpine
     container_name: traefik
     domainname: ${DOMAIN}
+      - ''
     #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
     restart: always
     ports:
@@ -36,6 +37,8 @@ services:
       - traefik.frontend.rule=Host:monitor.${DOMAIN}
       - traefik.docker.network=web
       - traefik.port=${MONITOR_PORT}
+      - traefik.docker.domain=${DOMAIN}
+      - traefik.docker.network=web
     networks:
       - web
   adminer:
@@ -157,14 +160,14 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-  ocpu:
-    container_name: ocpu
-    image: opencpu/base
-    ports:
-      - 8004:8004
-    networks:
-      - web
-      - internal
+#  ocpu:
+#    container_name: ocpu
+#    image: opencpu/base
+#    ports:
+#      - 8004:8004
+#    networks:
+#      - web
+#      - internal
 networks:
   internal:
     external: false

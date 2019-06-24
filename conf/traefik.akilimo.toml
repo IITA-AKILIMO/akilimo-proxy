@@ -6,7 +6,7 @@ defaultEntryPoints = ["http"]
 
 [entryPoints]
   [entryPoints.dashboard]
-    address = ":8081"
+#    address = ":8081"
     [entryPoints.dashboard.auth]
       [entryPoints.dashboard.auth.basic]
         users = ["admin:$apr1$uHwe2EeI$Z4B00WXncEWMN5EYuoK3V0"]
@@ -18,7 +18,7 @@ entrypoint="dashboard"
 
 
 [docker]
-domain = "akilimo.org"
+#domain = ${DOMAIN}
 exposedbydefault = true
 watch = true
-network = "web"
+#network = "web"
