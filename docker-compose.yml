@@ -38,7 +38,6 @@ services:
       - traefik.docker.network=web
       - traefik.port=${MONITOR_PORT}
       - traefik.docker.domain=${DOMAIN}
-      - traefik.docker.network=web
     networks:
       - web
   adminer:
