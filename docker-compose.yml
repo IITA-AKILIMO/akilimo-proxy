@@ -111,7 +111,8 @@ services:
     container_name: plumber
     #image: tsobu/plumber-cropmanager:release-2.0
     #image: tsobu/plumber-cropmanager:latest
-    image: iita/akilimo-compute:latest
+    #image: iita/akilimo-compute:latest
+    image: iita/akilimo-compute:full
     restart: on-failure
     ports:
       - 8000:8000
@@ -157,7 +158,6 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /gisdata
 networks:
   internal:
     external: false
