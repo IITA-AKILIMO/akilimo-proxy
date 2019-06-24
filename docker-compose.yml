@@ -24,8 +24,8 @@ services:
     #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
     restart: always
     ports:
-      - 8080:80
-      - 8443:443
+      - 8080:8080
+      - 8443:8443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PWD}/conf/${CONFIG_FILE}:/traefik.toml
@@ -53,7 +53,7 @@ services:
     links:
       - db:mysql
     ports:
-      - 8085:8080
+      - 8085:8085
     labels:
       - traefik.enable=true
       - traefik.backend=adminer
