@@ -7,6 +7,28 @@ networks:
     external: false
 
 services:
+  traefik:
+    image: traefik:1.7.8-alpine
+    container_name: traefik
+    domainname: ${DOMAIN}
+    #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/conf/${CONFIG_FILE}:/traefik.toml
+      - ${PWD}/conf/acme.json:/acme.json
+    labels:
+      - traefik.enable=true
+      - traefik.backend=monitor
+      - traefik.frontend.rule=Host:monitor.${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=${MONITOR_PORT}
+      - traefik.docker.domain=${DOMAIN}
+    networks:
+      - web
   blog:
     image: wordpress:4.9.8-apache
     environment:
