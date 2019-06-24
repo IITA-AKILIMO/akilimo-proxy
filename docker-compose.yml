@@ -39,24 +39,8 @@ services:
       - traefik.enable=true
     networks:
       - internal
-  blog:
-    image: wordpress:4.9.8-apache
-    environment:
-      WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
-    labels:
-      - traefik.backend=blog
-      - traefik.frontend.rule=Host:${DOMAIN}
-      - traefik.docker.network=web
-      - traefik.port=80
-    networks:
-      - internal
-      - web
-    depends_on:
-      - db
-      - traefik
   adminer:
     container_name: adminer
-    #image: adminer:4.3.1-standalone
     image: adminer
     environment:
       ADMINER_DEFAULT_DB_DRIVER: mysql
