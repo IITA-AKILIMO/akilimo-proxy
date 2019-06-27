@@ -1,22 +1,6 @@
 version: '3.3'
 
 services:
-  db:
-    image: mariadb:10.2
-    container_name: db
-    restart: on-failure
-    environment:
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
-      MYSQL_DATABASE: ${CROP_DATABASE}
-      MYSQL_USER: ${CROP_DATABASE_USERNAME}
-      MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
-    volumes:
-      - ${PWD}/database:/var/lib/mysql
-    labels:
-      - traefik.enable=true
-    networks:
-      - internal
   traefik:
     image: traefik:1.7.8-alpine
     container_name: traefik
@@ -36,11 +20,27 @@ services:
       - traefik.frontend.rule=Host:monitor.${DOMAIN}
       - traefik.docker.network=web
       - traefik.port=${MONITOR_PORT}
+      - traefik.docker.domain=${DOMAIN}
     networks:
       - web
+  db:
+    image: mariadb:10.2
+    container_name: db
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${CROP_DATABASE}
+      MYSQL_USER: ${CROP_DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+    volumes:
+      - ${PWD}/database:/var/lib/mysql
+    labels:
+      - traefik.enable=true
+    networks:
+      - internal
   adminer:
     container_name: adminer
-    #image: adminer:4.3.1-standalone
     image: adminer
     environment:
       ADMINER_DEFAULT_DB_DRIVER: mysql
@@ -118,7 +118,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.backend=plumber
-      - traefik.frontend.rule=Host:plumber.${DOMAIN}
+      - traefik.frontend.rule=Host:compute.${DOMAIN}
       - traefik.docker.network=web
     volumes:
       - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
@@ -129,42 +129,68 @@ services:
     networks:
       - web
       - internal
-  netdata:
-    container_name: netdata
-    image: netdata/netdata
-    hostname: netdata.${DOMAIN}
+  #  netdata:
+  #    container_name: netdata
+  #    image: netdata/netdata
+  #    hostname: netdata.${DOMAIN}
+  #    restart: always
+  #    ports:
+  #      - 19999:19999
+  #    labels:
+  #      - traefik.enable=true
+  #      - traefik.backend=netdata
+  #      - traefik.frontend.rule=Host:netdata.${DOMAIN}
+  #      - traefik.docker.network=web
+  #      - traefik.frontend.auth.basic=${USER_PASS}
+  #    environment:
+  #      - PGID=${DOCKER_GROUP}
+  #    cap_add:
+  #      - SYS_PTRACE
+  #    security_opt:
+  #      - apparmor:unconfined
+  #    depends_on:
+  #      - traefik
+  #    networks:
+  #      - web
+  #      - internal
+  #    volumes:
+  #      - /proc:/host/proc:ro
+  #      - /sys:/host/sys:ro
+  #      - /var/run/docker.sock:/var/run/docker.sock:ro
+  #  ocpu:
+  #    container_name: ocpu
+  #    image: opencpu/base
+  #    ports:
+  #      - 8004:8004
+  #    networks:
+  #      - web
+  #      - internal
+
+  blog:
+    container_name: blog
+    image: wordpress:5.2.2-php7.2-apache
     restart: always
-    ports:
-      - 19999:19999
-    labels:
-      - traefik.enable=true
-      - traefik.backend=netdata
-      - traefik.frontend.rule=Host:netdata.${DOMAIN}
-      - traefik.docker.network=web
-      - traefik.frontend.auth.basic=${USER_PASS}
     environment:
-      - PGID=${DOCKER_GROUP}
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - apparmor:unconfined
-    depends_on:
-      - traefik
-    networks:
-      - web
-      - internal
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
+      WORDPRESS_DB_NAME: ${CROP_DATABASE}
+      WORDPRESS_TABLE_PREFIX: "wrdp"
+    links:
+      - db:mysql
+    labels:
+      - traefik.backend=blog
+      - traefik.frontend.rule=Host:${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=80
     volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-  ocpu:
-    container_name: ocpu
-    image: opencpu/base
-    ports:
-      - 8004:8004
+      - ${PWD}/wp-content:/var/www/html/wp-content
     networks:
-      - web
       - internal
+      - web
+    depends_on:
+      - db
+      - traefik
 networks:
   internal:
     external: false
