@@ -168,7 +168,7 @@ services:
 
   blog:
     container_name: blog
-    image: wordpress:4.9.8-apache
+    image: wordpress:5.2.2-php7.2-apache
     restart: always
     environment:
       WORDPRESS_DB_HOST: db
