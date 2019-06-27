@@ -129,42 +129,42 @@ services:
     networks:
       - web
       - internal
-#  netdata:
-#    container_name: netdata
-#    image: netdata/netdata
-#    hostname: netdata.${DOMAIN}
-#    restart: always
-#    ports:
-#      - 19999:19999
-#    labels:
-#      - traefik.enable=true
-#      - traefik.backend=netdata
-#      - traefik.frontend.rule=Host:netdata.${DOMAIN}
-#      - traefik.docker.network=web
-#      - traefik.frontend.auth.basic=${USER_PASS}
-#    environment:
-#      - PGID=${DOCKER_GROUP}
-#    cap_add:
-#      - SYS_PTRACE
-#    security_opt:
-#      - apparmor:unconfined
-#    depends_on:
-#      - traefik
-#    networks:
-#      - web
-#      - internal
-#    volumes:
-#      - /proc:/host/proc:ro
-#      - /sys:/host/sys:ro
-#      - /var/run/docker.sock:/var/run/docker.sock:ro
-#  ocpu:
-#    container_name: ocpu
-#    image: opencpu/base
-#    ports:
-#      - 8004:8004
-#    networks:
-#      - web
-#      - internal
+  #  netdata:
+  #    container_name: netdata
+  #    image: netdata/netdata
+  #    hostname: netdata.${DOMAIN}
+  #    restart: always
+  #    ports:
+  #      - 19999:19999
+  #    labels:
+  #      - traefik.enable=true
+  #      - traefik.backend=netdata
+  #      - traefik.frontend.rule=Host:netdata.${DOMAIN}
+  #      - traefik.docker.network=web
+  #      - traefik.frontend.auth.basic=${USER_PASS}
+  #    environment:
+  #      - PGID=${DOCKER_GROUP}
+  #    cap_add:
+  #      - SYS_PTRACE
+  #    security_opt:
+  #      - apparmor:unconfined
+  #    depends_on:
+  #      - traefik
+  #    networks:
+  #      - web
+  #      - internal
+  #    volumes:
+  #      - /proc:/host/proc:ro
+  #      - /sys:/host/sys:ro
+  #      - /var/run/docker.sock:/var/run/docker.sock:ro
+  #  ocpu:
+  #    container_name: ocpu
+  #    image: opencpu/base
+  #    ports:
+  #      - 8004:8004
+  #    networks:
+  #      - web
+  #      - internal
 
   blog:
     container_name: blog
@@ -183,6 +183,8 @@ services:
       - traefik.frontend.rule=Host:${DOMAIN}
       - traefik.docker.network=web
       - traefik.port=80
+    volumes:
+      - ${PWD}/wp-content:/var/www/html/wp-content
     networks:
       - internal
       - web
