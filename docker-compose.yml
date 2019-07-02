@@ -157,15 +157,13 @@ services:
   jenkins:
     image: bitnami/jenkins:2
     ports:
-      - 80:8080
-      - 443:8443
+      - 8099:8080
       - 50000:50000
     labels:
       - traefik.enable=true
       - traefik.backend=jenkins
       - traefik.frontend.rule=Host:ci.${DOMAIN}
       - traefik.docker.network=web
-      - traefik.port=80
     volumes:
       - jenkins_data:/bitnami
     depends_on:
