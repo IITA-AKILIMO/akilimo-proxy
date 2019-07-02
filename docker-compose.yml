@@ -129,8 +129,8 @@ services:
     networks:
       - web
       - internal
-  blog:
-    container_name: blog
+  site:
+    container_name: site
     image: wordpress:5.2.2-php7.2-apache
     restart: always
     environment:
@@ -154,24 +154,6 @@ services:
     depends_on:
       - db
       - traefik
-  jenkins:
-#    image: bitnami/jenkins:2
-    image: jenkins/jenkins:lts
-    ports:
-      - 8080:8080
-      - 50000:50000
-    labels:
-      - traefik.enable=true
-      - traefik.backend=jenkins
-      - traefik.frontend.rule=Host:ci.${DOMAIN}
-      - traefik.docker.network=web
-    volumes:
-      - jenkins_data:/jenkins_config
-    depends_on:
-      - traefik
-    networks:
-      - web
-      - internal
 networks:
   internal:
     external: false
