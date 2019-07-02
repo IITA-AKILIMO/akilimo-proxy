@@ -129,43 +129,6 @@ services:
     networks:
       - web
       - internal
-  #  netdata:
-  #    container_name: netdata
-  #    image: netdata/netdata
-  #    hostname: netdata.${DOMAIN}
-  #    restart: always
-  #    ports:
-  #      - 19999:19999
-  #    labels:
-  #      - traefik.enable=true
-  #      - traefik.backend=netdata
-  #      - traefik.frontend.rule=Host:netdata.${DOMAIN}
-  #      - traefik.docker.network=web
-  #      - traefik.frontend.auth.basic=${USER_PASS}
-  #    environment:
-  #      - PGID=${DOCKER_GROUP}
-  #    cap_add:
-  #      - SYS_PTRACE
-  #    security_opt:
-  #      - apparmor:unconfined
-  #    depends_on:
-  #      - traefik
-  #    networks:
-  #      - web
-  #      - internal
-  #    volumes:
-  #      - /proc:/host/proc:ro
-  #      - /sys:/host/sys:ro
-  #      - /var/run/docker.sock:/var/run/docker.sock:ro
-  #  ocpu:
-  #    container_name: ocpu
-  #    image: opencpu/base
-  #    ports:
-  #      - 8004:8004
-  #    networks:
-  #      - web
-  #      - internal
-
   blog:
     container_name: blog
     image: wordpress:5.2.2-php7.2-apache
@@ -191,8 +154,30 @@ services:
     depends_on:
       - db
       - traefik
+  jenkins:
+    image: bitnami/jenkins:2
+    ports:
+      - 80:8080
+      - 443:8443
+      - 50000:50000
+    labels:
+      - traefik.enable=true
+      - traefik.backend=jenkins
+      - traefik.frontend.rule=Host:ci.${DOMAIN}
+      - traefik.docker.network=web
+      - traefik.port=80
+    volumes:
+      - jenkins_data:/bitnami
+    depends_on:
+      - traefik
+    networks:
+      - web
+      - internal
 networks:
   internal:
     external: false
   web:
     external: true
+volumes:
+  jenkins_data:
+    driver: local
