@@ -159,6 +159,3 @@ networks:
     external: false
   web:
     external: true
-volumes:
-  jenkins_data:
-    driver: local
