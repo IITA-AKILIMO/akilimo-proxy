@@ -155,7 +155,8 @@ services:
       - db
       - traefik
   jenkins:
-    image: bitnami/jenkins:2
+#    image: bitnami/jenkins:2
+    image: jenkins/jenkins:lts
     ports:
       - 8099:8080
       - 50000:50000
@@ -165,7 +166,7 @@ services:
       - traefik.frontend.rule=Host:ci.${DOMAIN}
       - traefik.docker.network=web
     volumes:
-      - jenkins_data:/bitnami
+      - jenkins_data:/jenkins_config
     depends_on:
       - traefik
     networks:
