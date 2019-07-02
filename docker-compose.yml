@@ -158,7 +158,7 @@ services:
 #    image: bitnami/jenkins:2
     image: jenkins/jenkins:lts
     ports:
-      - 8099:8080
+      - 8080:8080
       - 50000:50000
     labels:
       - traefik.enable=true
