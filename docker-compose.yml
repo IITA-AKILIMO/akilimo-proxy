@@ -71,6 +71,8 @@ services:
     ports:
       #- "8098-8200:8098"
       - 8098:8098
+    volumes:
+      - ${PWD}/log:/log
     labels:
       - traefik.enable=true
       - traefik.backend=spring
