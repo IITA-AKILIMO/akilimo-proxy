@@ -13,3 +13,4 @@ currentyield/*
 install_pkg.R
 wp_content/*
 wp-content/*
+log/*
