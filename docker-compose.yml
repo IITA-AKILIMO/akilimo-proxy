@@ -26,8 +26,7 @@ services:
           - ./nginx.conf:/etc/nginx/nginx.conf:ro
         networks:
            - web
-    site:
-      container_name: site
+    homepage:
       image: wordpress:5.2.2-php7.2-apache
       restart: always
       environment:
