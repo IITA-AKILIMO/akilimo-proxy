@@ -46,10 +46,11 @@ services:
           - db
 
     nginx:
-        container_name: nginx
         image: nginx:alpine
         restart: always
-
+        depends_on:
+          - rproxy
+          
     apache:
         image: httpd:alpine
         restart: always
