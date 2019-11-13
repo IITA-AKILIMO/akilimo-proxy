@@ -24,8 +24,6 @@ services:
       MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
     volumes:
       - ${PWD}/database:/var/lib/mysql
-    labels:
-      - traefik.enable=true
     networks:
       - internal
   adminer:
@@ -51,7 +49,6 @@ services:
       - web
       - internal
     depends_on:
-      - traefik
       - db
   spring:
     container_name: spring
@@ -88,7 +85,6 @@ services:
       - PLIVO_AUTH_ID=${PLIVO_AUTH_ID}
       - PLIVO_SENDER=${PLIVO_SENDER}
     depends_on:
-      - traefik
       - db
       - plumber
     networks:
@@ -127,7 +123,6 @@ services:
       - web
     depends_on:
       - db
-      - traefik
 networks:
   internal:
     external: false
