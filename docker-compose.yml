@@ -1,5 +1,4 @@
 version: '3'
-
 services:
     reverseproxy:
         image: reverseproxy:latest
@@ -13,8 +12,6 @@ services:
           - apache:apache
 
     nginx:
-        depends_on:
-            - reverseproxy
         image: nginx:alpine
         restart: always
 
