@@ -40,11 +40,6 @@ services:
       - db:mysql
     ports:
       - 8080:8080
-    labels:
-      - traefik.enable=true
-      - traefik.backend=adminer
-      - traefik.frontend.rule=Host:adminer.${DOMAIN}
-      - traefik.docker.network=web
     networks:
       - web
       - internal
@@ -99,8 +94,6 @@ services:
       - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
       - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
       - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
-    depends_on:
-      - traefik
     networks:
       - web
       - internal
