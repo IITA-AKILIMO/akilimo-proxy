@@ -1,18 +1,49 @@
 version: '3'
 services:
+  db:
+    image: mariadb:10.2
+    container_name: db
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${CROP_DATABASE}
+      MYSQL_USER: ${CROP_DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+    volumes:
+      - ${PWD}/database:/var/lib/mysql
+    networks:
+      - internal
+
     reverseproxy:
         image: nginx:alpine
         ports:
             - 80:80
             - 443:443
-            - 8080:8080
-            - 8081:8081
         restart: always
         volumes:
           - ./nginx.conf:/etc/nginx/nginx.conf:ro
-        links:
-          - nginx:nginx
-          - apache:apache
+        networks:
+           - web
+  site:
+    container_name: site
+    image: wordpress:5.2.2-php7.2-apache
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
+      WORDPRESS_DB_NAME: ${CROP_DATABASE}
+      WORDPRESS_TABLE_PREFIX: "wrdp"
+    links:
+      - db:mysql
+    volumes:
+      - ${PWD}/wp-content:/var/www/html/wp-content
+    networks:
+      - internal
+      - web
+    depends_on:
+      - db
 
     nginx:
         image: nginx:alpine
@@ -21,3 +52,8 @@ services:
     apache:
         image: httpd:alpine
         restart: always
+networks:
+  internal:
+    external: false
+  web:
+    external: true
