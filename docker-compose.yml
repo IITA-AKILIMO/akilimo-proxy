@@ -3,7 +3,6 @@ services:
     reverseproxy:
         image: reverseproxy:latest
         ports:
-            - 80:80
             - 8080:8080
             - 8081:8081
         restart: always
