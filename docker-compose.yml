@@ -46,6 +46,7 @@ services:
           - db
 
     nginx:
+      containername: nginx
         image: nginx:alpine
         restart: always
 
