@@ -16,7 +16,7 @@ services:
       networks:
         - internal
 
-    proxy:
+    rproxy:
         image: nginx:alpine
         ports:
             - 80:80
