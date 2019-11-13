@@ -118,8 +118,10 @@ services:
     image: iita/akilimo-compute:latest
     #    image: iita/akilimo-compute:full
     restart: on-failure
-    ports:
-      - 8000:8000
+    #ports:
+    #  - 8000:8000
+    expose:
+      - "8000"
     labels:
       - traefik.enable=true
       - traefik.backend=plumber
