@@ -45,6 +45,7 @@ services:
         - web
       depends_on:
         - db
+        - reverseproxy
 
     nginx:
         image: nginx:alpine
