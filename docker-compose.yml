@@ -6,12 +6,58 @@ services:
     container_name: nginx
     hostname: nginx
     volumes:
-      #- ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - "./web.conf:/etc/nginx/conf.d/web.conf:ro"
-      - "./api.conf:/etc/nginx/conf.d/api.conf:ro"
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      # - "./web.conf:/etc/nginx/conf.d/web.conf:ro"
+      # - "./api.conf:/etc/nginx/conf.d/api.conf:ro"
     ports:
       - 80:80
       - 443:443
+  spring:
+    container_name: spring
+    image: iita/acai-akilimo-api:latest
+    restart: on-failure
+    expose:
+      - "8098"
+    volumes:
+      - ${PWD}/log:/log
+    labels:
+      - traefik.enable=true
+      - traefik.backend=spring
+      - traefik.frontend.rule=Host:spring.${DOMAIN}
+      - traefik.docker.network=web
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - CROP_DATABASE_URL=${CROP_DATABASE_URL}
+      - CROP_DATABASE_USERNAME=${CROP_DATABASE_USERNAME}
+      - CROP_DATABASE_PASSWORD=${CROP_DATABASE_PASSWORD}
+      - DEMO_MODE=${DEMO_MODE}
+      - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
+      - TZ_ENDPOINT=${TZ_ENDPOINT}
+      - TZ_DEMO_ENDPOINT=${TZ_DEMO_ENDPOINT}
+      - NG_DEMO_ENDPOINT=${NG_DEMO_ENDPOINT}
+      - NG_ENDPOINT=${NG_ENDPOINT}
+      - VERIFY_CERT=${VERIFY_CERT}
+      - MS_WEBHOOK=${MS_WEBHOOK}
+      - TZS_USD_RATE=${TZS_USD_RATE}
+      - NGN_USD_RATE=${NGN_USD_RATE}
+      - KES_USD_RATE=${KES_USD_RATE}
+      - MS_TEST_NUMBERS=${MS_TEST_NUMBERS}
+      - INFOBIP_ENDPOINT=${INFOBIP_ENDPOINT}
+      - INFOBIP_SENDER=${INFOBIP_SENDER}
+      - INFOBIP_USER_NAME=${INFOBIP_USER_NAME}
+      - INFOBIP_USER_PASS=${INFOBIP_USER_PASS}
+      - INFOBIP_AUTH_KEY=${INFOBIP_AUTH_KEY}
+      - PLIVO_ENDPOINT=${PLIVO_ENDPOINT}
+      - PLIVO_AUTH_KEY=${PLIVO_AUTH_KEY}
+      - PLIVO_AUTH_ID=${PLIVO_AUTH_ID}
+      - PLIVO_SENDER=${PLIVO_SENDER}
+    depends_on:
+      - nginx
+      - db
+      - plumber
+    networks:
+      - web
+      - internal
 networks:
   internal:
     external: false
