@@ -27,23 +27,23 @@ services:
         networks:
            - web
     homepage:
-      image: wordpress:5.2.2-php7.2-apache
-      restart: always
-      environment:
-        WORDPRESS_DB_HOST: db
-        WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
-        WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
-        WORDPRESS_DB_NAME: ${CROP_DATABASE}
-        WORDPRESS_TABLE_PREFIX: "mysite_"
-      links:
-        - db:mysql
-      volumes:
-        - ${PWD}/wp-content:/var/www/html/wp-content
-      networks:
-        - internal
-        - web
-      depends_on:
-        - db
+        image: wordpress:5.2.2-php7.2-apache
+        restart: always
+        environment:
+          WORDPRESS_DB_HOST: db
+          WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
+          WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
+          WORDPRESS_DB_NAME: ${CROP_DATABASE}
+          WORDPRESS_TABLE_PREFIX: "mysite_"
+        links:
+          - db:mysql
+        volumes:
+          - ${PWD}/wp-content:/var/www/html/wp-content
+        networks:
+          - internal
+          - web
+        depends_on:
+          - db
 
     nginx:
         image: nginx:alpine
