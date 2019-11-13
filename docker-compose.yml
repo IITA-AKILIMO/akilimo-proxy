@@ -11,9 +11,9 @@ services:
         MYSQL_DATABASE: ${CROP_DATABASE}
         MYSQL_USER: ${CROP_DATABASE_USERNAME}
         MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
-      volumes:
-        - ./mysql-dump:/docker-entrypoint-initdb.d
-        - ${PWD}/database:/var/lib/mysql
+      #volumes:
+      #  - ./mysql-dump:/docker-entrypoint-initdb.d
+      #  - ${PWD}/database:/var/lib/mysql
 
     rproxy:
         image: nginx:alpine
