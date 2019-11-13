@@ -16,7 +16,5 @@ services:
         restart: always
 
     apache:
-        depends_on:
-            - reverseproxy
         image: httpd:alpine
         restart: always
