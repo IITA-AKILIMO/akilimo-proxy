@@ -12,20 +12,6 @@ services:
     ports:
       - 80:80
       - 443:443
-  db:
-    image: mariadb:10.2
-    container_name: db
-    restart: on-failure
-    environment:
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
-      MYSQL_DATABASE: ${CROP_DATABASE}
-      MYSQL_USER: ${CROP_DATABASE_USERNAME}
-      MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
-    volumes:
-      - ${PWD}/database:/var/lib/mysql
-    networks:
-      - internal
   spring:
     container_name: spring
     image: iita/acai-akilimo-api:latest
@@ -34,13 +20,8 @@ services:
       - "8098"
     volumes:
       - ${PWD}/log:/log
-    labels:
-      - traefik.enable=true
-      - traefik.backend=spring
-      - traefik.frontend.rule=Host:spring.${DOMAIN}
-      - traefik.docker.network=web
     environment:
-      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - SPRING_PROFILES_ACTIVE=dev
       - CROP_DATABASE_URL=${CROP_DATABASE_URL}
       - CROP_DATABASE_USERNAME=${CROP_DATABASE_USERNAME}
       - CROP_DATABASE_PASSWORD=${CROP_DATABASE_PASSWORD}
@@ -65,10 +46,6 @@ services:
       - PLIVO_AUTH_KEY=${PLIVO_AUTH_KEY}
       - PLIVO_AUTH_ID=${PLIVO_AUTH_ID}
       - PLIVO_SENDER=${PLIVO_SENDER}
-    depends_on:
-      - nginx
-      - db
-      - plumber
     networks:
       - web
       - internal
