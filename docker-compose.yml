@@ -11,10 +11,11 @@ services:
         MYSQL_USER: ${CROP_DATABASE_USERNAME}
         MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
       volumes:
+        - ./mysql-dump:/docker-entrypoint-initdb.d
         - ${PWD}/database:/var/lib/mysql
       networks:
         - internal
-        
+
     reverseproxy:
         image: nginx:alpine
         ports:
@@ -33,7 +34,7 @@ services:
         WORDPRESS_DB_HOST: db
         WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
         WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
-        WORDPRESS_DB_NAME: ${CROP_DATABASE}
+        WORDPRESS_DB_NAME: ${SITE_DATABASE}
         WORDPRESS_TABLE_PREFIX: "wrdp"
       links:
         - db:mysql
