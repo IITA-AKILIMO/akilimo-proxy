@@ -16,7 +16,7 @@ services:
       networks:
         - internal
 
-    reverseproxy:
+    proxy:
         image: nginx:alpine
         ports:
             - 80:80
@@ -44,7 +44,6 @@ services:
         - web
       depends_on:
         - db
-        - reverseproxy
 
     nginx:
         image: nginx:alpine
