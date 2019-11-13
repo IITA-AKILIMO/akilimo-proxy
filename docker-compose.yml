@@ -6,7 +6,9 @@ services:
     container_name: nginx
     hostname: nginx
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      #- ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - "./docker/web.conf:/etc/nginx/conf.d/web.conf:ro"
+      - "./docker/api.conf:/etc/nginx/conf.d/api.conf:ro"
     ports:
       - 80:80
       - 443:443
