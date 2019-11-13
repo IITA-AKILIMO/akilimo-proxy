@@ -5,8 +5,8 @@ services:
         ports:
             - 80:80
             - 443:443
-            #- 8080:8080
-            #- 8081:8081
+            - 8080:8080
+            - 8081:8081
         restart: always
         volumes:
           - ./nginx.conf:/etc/nginx/nginx.conf:ro
@@ -17,11 +17,7 @@ services:
     nginx:
         image: nginx:alpine
         restart: always
-        ports:
-          - 8080:8080
 
     apache:
         image: httpd:alpine
         restart: always
-        ports:
-          - 8081:8081
