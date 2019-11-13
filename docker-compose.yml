@@ -27,6 +27,7 @@ services:
         networks:
            - web
     homepage:
+      container_name: homepage
         image: wordpress:5.2.2-php7.2-apache
         restart: always
         environment:
@@ -50,7 +51,7 @@ services:
         restart: always
         depends_on:
           - rproxy
-          
+
     apache:
         image: httpd:alpine
         restart: always
