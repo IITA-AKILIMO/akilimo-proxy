@@ -48,6 +48,7 @@ services:
           - db
 
     nginx:
+        container_name: nginx
         image: nginx:alpine
         restart: always
         depends_on:
