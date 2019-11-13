@@ -16,7 +16,11 @@ services:
     nginx:
         image: nginx:alpine
         restart: always
+        ports:
+          - 8080:8080
 
     apache:
         image: httpd:alpine
         restart: always
+        ports:
+          - 8081:8081
