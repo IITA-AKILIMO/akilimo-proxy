@@ -27,7 +27,7 @@ services:
         networks:
            - web
     homepage:
-      container_name: homepage
+        container_name: homepage
         image: wordpress:5.2.2-php7.2-apache
         restart: always
         environment:
