@@ -1,13 +1,16 @@
-version: '2'
+version: '3'
 
 services:
     reverseproxy:
-        image: reverseproxy
+        image: reverseproxy:latest
         ports:
             - 80:80
             - 8080:8080
             - 8081:8081
         restart: always
+        links:
+          - nginx:nginx
+          - apache:apache
 
     nginx:
         depends_on:
