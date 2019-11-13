@@ -12,20 +12,20 @@ services:
     ports:
       - 80:80
       - 443:443
-    db:
-      image: mariadb:10.2
-      container_name: db
-      restart: on-failure
-      environment:
-        MYSQL_ROOT_HOST: "%"
-        MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
-        MYSQL_DATABASE: ${CROP_DATABASE}
-        MYSQL_USER: ${CROP_DATABASE_USERNAME}
-        MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
-      volumes:
-        - ${PWD}/database:/var/lib/mysql
-      networks:
-        - internal
+  db:
+    image: mariadb:10.2
+    container_name: db
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${CROP_DATABASE}
+      MYSQL_USER: ${CROP_DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+    volumes:
+      - ${PWD}/database:/var/lib/mysql
+    networks:
+      - internal
   spring:
     container_name: spring
     image: iita/acai-akilimo-api:latest
