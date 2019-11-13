@@ -112,7 +112,7 @@ services:
       - web
       - internal
   plumber:
-    container_name: plumber
+    #container_name: plumber
     #image: tsobu/plumber-cropmanager:release-2.0
     #image: tsobu/plumber-cropmanager:latest
     image: iita/akilimo-compute:latest
