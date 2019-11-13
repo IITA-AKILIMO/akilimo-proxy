@@ -1,23 +1,11 @@
 version: '3'
 
 services:
-    db:
-      image: mariadb:10.2
-      container_name: db
-      restart: on-failure
-      environment:
-        MYSQL_ROOT_HOST: "%"
-        MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
-        MYSQL_DATABASE: ${CROP_DATABASE}
-        MYSQL_USER: ${CROP_DATABASE_USERNAME}
-        MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
-      #volumes:
-      #  - ./mysql-dump:/docker-entrypoint-initdb.d
-      #  - ${PWD}/database:/var/lib/mysql
-
-    rproxy:
+    reverseproxy:
         image: nginx:alpine
         ports:
+            - 8080:8080
+            - 8081:8081
             - 80:80
             - 443:443
         restart: always
@@ -26,12 +14,12 @@ services:
 
     nginx:
         depends_on:
-            - rproxy
+            - reverseproxy
         image: nginx:alpine
         restart: always
 
     apache:
         depends_on:
-            - rproxy
+            - reverseproxy
         image: httpd:alpine
         restart: always
