@@ -34,9 +34,12 @@ services:
       container_name: db
       restart: on-failure
       environment:
+        MARIADB_ROOT_USER: ${CROP_DATABASE_USERNAME}
+        MARIADB_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
         MARIADB_USER: ${CROP_DATABASE_USERNAME}
-        MARIADB_DATABASE: ${CROP_DATABASE_PASSWORD}
-        ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD}
+        MARIADB_PASSWORD: ${CROP_DATABASE_PASSWORD}
+        MARIADB_DATABASE: ${CROP_DATABASE}
+        # ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD}
       volumes:
         - mariadb_data:/bitnami
       labels:
@@ -54,7 +57,7 @@ services:
         WORDPRESS_DATABASE_USER: ${CROP_DATABASE_USERNAME}
         WORDPRESS_DATABASE_NAME: ${CROP_DATABASE}
         WORDPRESS_TABLE_PREFIX: "wrdp"
-        ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD}
+        # ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD}
       labels:
         - traefik.backend=blog
         - traefik.frontend.rule=Host:${DOMAIN}
