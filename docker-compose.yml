@@ -27,25 +27,7 @@ services:
         volumes:
           - ./nginx.conf:/etc/nginx/nginx.conf
 
-    nginx:
-        depends_on:
-            - reverseproxy
-        image: nginx:alpine
-        restart: always
-
-    apache:
-        depends_on:
-            - reverseproxy
-        image: httpd:alpine
-        restart: always
-
-    spring:
-      depends_on:
-          - reverseproxy
-      image: iita/acai-akilimo-api:latest
-      restart: always
-
-    site:
+    frontend:
       image: wordpress:5.2.2-php7.2-apache
       restart: always
       environment:
@@ -66,6 +48,23 @@ services:
       depends_on:
         - db
         # - traefik
+    nginx:
+        depends_on:
+            - reverseproxy
+        image: nginx:alpine
+        restart: always
+
+    apache:
+        depends_on:
+            - reverseproxy
+        image: httpd:alpine
+        restart: always
+
+    spring:
+      depends_on:
+          - reverseproxy
+      image: iita/acai-akilimo-api:latest
+      restart: always
 
 networks:
   internal:
