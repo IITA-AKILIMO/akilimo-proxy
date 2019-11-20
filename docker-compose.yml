@@ -45,7 +45,7 @@ services:
         - traefik.enable=true
 
     frontend:
-      image: wordpress:5.2.2-php7.2-apache
+      image: wordpress:5.3-php7.2-apache
       depends_on:
         - reverseproxy
       restart: always
