@@ -26,4 +26,6 @@ services:
       depends_on:
           - reverseproxy
       image: iita/acai-akilimo-api:latest
+      ports:
+         - "8098-8110:8098"
       restart: always
