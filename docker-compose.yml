@@ -25,6 +25,7 @@ services:
     spring:
       depends_on:
           - reverseproxy
+          - db
       image: iita/acai-akilimo-api:latest
       restart: always
 
@@ -44,8 +45,9 @@ services:
         - traefik.enable=true
 
     frontend:
-      container_name: site
       image: wordpress:5.2.2-php7.2-apache
+      depends_on:
+        - reverseproxy
       restart: always
       environment:
         WORDPRESS_DB_HOST: db
@@ -62,5 +64,3 @@ services:
         - traefik.port=80
       volumes:
         - ${PWD}/wp-content:/var/www/html/wp-content
-      depends_on:
-        - reverseproxy
