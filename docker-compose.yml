@@ -46,7 +46,6 @@ services:
       restart: always
 
     site:
-      container_name: site
       image: wordpress:5.2.2-php7.2-apache
       restart: always
       environment:
