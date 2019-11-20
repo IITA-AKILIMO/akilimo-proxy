@@ -38,7 +38,7 @@ services:
         MARIADB_DATABASE: ${CROP_DATABASE_PASSWORD}
         ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD}
       volumes:
-        - ${PWD}/database:/bitnami
+        - mariadb_data:/bitnami
       labels:
         - traefik.enable=true
 
@@ -61,5 +61,10 @@ services:
         - traefik.docker.network=web
         - traefik.port=80
       volumes:
-        - ${PWD}/frontend:/bitnami
+        - wordpress_data:/bitnami
         # - ${PWD}/frontend:/var/www/html/frontend
+volumes:
+  mariadb_data:
+    driver: local
+  wordpress_data:
+    driver: local
