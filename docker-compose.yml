@@ -15,8 +15,6 @@ services:
         - ${PWD}/database:/var/lib/mysql
       labels:
         - traefik.enable=true
-      networks:
-        - internal
 
     reverseproxy:
         image: nginx:alpine
@@ -66,8 +64,8 @@ services:
       image: iita/acai-akilimo-api:latest
       restart: always
 
-networks:
-  internal:
-    external: false
-  web:
-    external: true
+# networks:
+#   internal:
+#     external: false
+#   web:
+#     external: true
