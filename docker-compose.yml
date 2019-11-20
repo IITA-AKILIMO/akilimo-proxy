@@ -30,37 +30,36 @@ services:
       restart: always
 
     db:
-      image: mariadb:10.2
+      image: bitnami/mariadb:10.3
       container_name: db
       restart: on-failure
       environment:
-        MYSQL_ROOT_HOST: "%"
-        MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
-        MYSQL_DATABASE: ${CROP_DATABASE}
-        MYSQL_USER: ${CROP_DATABASE_USERNAME}
-        MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+        MARIADB_USER: ${CROP_DATABASE_USERNAME}
+        MARIADB_DATABASE: ${CROP_DATABASE_PASSWORD}
+        ALLOW_EMPTY_PASSWORD: YES
       volumes:
-        - ${PWD}/database:/var/lib/mysql
+        - ${PWD}/database:/bitnami
       labels:
         - traefik.enable=true
 
     frontend:
-      image: wordpress:5.3-php7.2-apache
+      image: 'bitnami/wordpress:5'
       depends_on:
         - reverseproxy
       restart: always
       environment:
-        WORDPRESS_DB_HOST: db
+        MARIADB_HOST: db
+        MARIADB_PORT_NUMBER: 3306
         WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
-        WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
-        WORDPRESS_DB_NAME: ${CROP_DATABASE}
+        WORDPRESS_DATABASE_USER: ${CROP_DATABASE_USERNAME}
+        WORDPRESS_DATABASE_NAME: ${CROP_DATABASE}
         WORDPRESS_TABLE_PREFIX: "wrdp"
-      links:
-        - db:mysql
+        ALLOW_EMPTY_PASSWORD: YES
       labels:
         - traefik.backend=blog
         - traefik.frontend.rule=Host:${DOMAIN}
         - traefik.docker.network=web
         - traefik.port=80
       volumes:
-        - ${PWD}/wp-content:/var/www/html/wp-content
+        - ${PWD}/frontend:/bitnami
+        # - ${PWD}/frontend:/var/www/html/frontend
