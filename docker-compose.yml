@@ -21,3 +21,9 @@ services:
             - reverseproxy
         image: httpd:alpine
         restart: always
+
+    spring:
+      depends_on:
+          - reverseproxy
+      image: iita/acai-akilimo-api:latest
+      restart: always
