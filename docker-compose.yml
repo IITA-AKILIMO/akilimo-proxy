@@ -1,6 +1,23 @@
 version: '3'
 
 services:
+    db:
+      image: mariadb:10.2
+      container_name: db
+      restart: always
+      environment:
+        MYSQL_ROOT_HOST: "%"
+        MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
+        MYSQL_DATABASE: ${CROP_DATABASE}
+        MYSQL_USER: ${CROP_DATABASE_USERNAME}
+        MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      volumes:
+        - ${PWD}/database:/var/lib/mysql
+      labels:
+        - traefik.enable=true
+      networks:
+        - internal
+
     reverseproxy:
         image: nginx:alpine
         ports:
@@ -27,3 +44,29 @@ services:
           - reverseproxy
       image: iita/acai-akilimo-api:latest
       restart: always
+
+    site:
+      container_name: site
+      image: wordpress:5.2.2-php7.2-apache
+      restart: always
+      environment:
+        WORDPRESS_DB_HOST: db
+        WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
+        WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
+        WORDPRESS_DB_NAME: ${CROP_DATABASE}
+        WORDPRESS_TABLE_PREFIX: "wrdp"
+      links:
+        - db:mysql
+      labels:
+        - traefik.backend=blog
+        - traefik.frontend.rule=Host:${DOMAIN}
+        - traefik.docker.network=web
+        - traefik.port=80
+      volumes:
+        - ${PWD}/wp-content:/var/www/html/wp-content
+      networks:
+        - internal
+        - web
+      depends_on:
+        - db
+        # - traefik
