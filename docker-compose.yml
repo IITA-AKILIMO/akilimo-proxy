@@ -48,8 +48,8 @@ services:
     frontend:
       image: 'bitnami/wordpress:5'
       ports:
-        - '80:80'
-        - '443:443'
+        - '80:8080'
+        - '443:4430'
       depends_on:
         - reverseproxy
       restart: always
