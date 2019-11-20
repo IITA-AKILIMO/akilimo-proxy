@@ -70,3 +70,9 @@ services:
       depends_on:
         - db
         # - traefik
+
+networks:
+  internal:
+    external: false
+  web:
+    external: true
