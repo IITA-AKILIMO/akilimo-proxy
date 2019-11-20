@@ -42,8 +42,8 @@ services:
         - ${PWD}/database:/var/lib/mysql
       labels:
         - traefik.enable=true
-        
-    site:
+
+    frontend:
       container_name: site
       image: wordpress:5.2.2-php7.2-apache
       restart: always
