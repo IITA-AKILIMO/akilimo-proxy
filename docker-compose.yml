@@ -31,7 +31,7 @@ services:
 
     db:
       image: bitnami/mariadb:10.3
-      container_name: db
+      # container_name: db
       restart: on-failure
       environment:
         MARIADB_ROOT_USER: ${CROP_DATABASE_USERNAME}
@@ -40,8 +40,8 @@ services:
         MARIADB_PASSWORD: ${CROP_DATABASE_PASSWORD}
         MARIADB_DATABASE: ${CROP_DATABASE}
         # ALLOW_EMPTY_PASSWORD: ${ALLOW_EMPTY_PASSWORD}
-      volumes:
-        - mariadb_data:/bitnami
+      # volumes:
+        # - mariadb_data:/bitnami
       labels:
         - traefik.enable=true
 
@@ -66,11 +66,6 @@ services:
         - traefik.frontend.rule=Host:${DOMAIN}
         - traefik.docker.network=web
         - traefik.port=80
-      volumes:
-        - wordpress_data:/bitnami
+      # volumes:
+        # - wordpress_data:/bitnami
         # - ${PWD}/frontend:/var/www/html/frontend
-volumes:
-  mariadb_data:
-    driver: local
-  wordpress_data:
-    driver: local
