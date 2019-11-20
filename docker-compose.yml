@@ -28,6 +28,21 @@ services:
       image: iita/acai-akilimo-api:latest
       restart: always
 
+    db:
+      image: mariadb:10.2
+      container_name: db
+      restart: on-failure
+      environment:
+        MYSQL_ROOT_HOST: "%"
+        MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
+        MYSQL_DATABASE: ${CROP_DATABASE}
+        MYSQL_USER: ${CROP_DATABASE_USERNAME}
+        MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      volumes:
+        - ${PWD}/database:/var/lib/mysql
+      labels:
+        - traefik.enable=true
+        
     site:
       container_name: site
       image: wordpress:5.2.2-php7.2-apache
