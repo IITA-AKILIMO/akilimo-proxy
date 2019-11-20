@@ -63,9 +63,6 @@ services:
         - traefik.port=80
       volumes:
         - ${PWD}/wp-content:/var/www/html/wp-content
-      networks:
-        - internal
-        - web
       depends_on:
         - db
         # - traefik
