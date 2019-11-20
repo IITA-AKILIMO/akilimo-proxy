@@ -27,3 +27,25 @@ services:
           - reverseproxy
       image: iita/acai-akilimo-api:latest
       restart: always
+
+    site:
+      container_name: site
+      image: wordpress:5.2.2-php7.2-apache
+      restart: always
+      environment:
+        WORDPRESS_DB_HOST: db
+        WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
+        WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
+        WORDPRESS_DB_NAME: ${CROP_DATABASE}
+        WORDPRESS_TABLE_PREFIX: "wrdp"
+      links:
+        - db:mysql
+      labels:
+        - traefik.backend=blog
+        - traefik.frontend.rule=Host:${DOMAIN}
+        - traefik.docker.network=web
+        - traefik.port=80
+      volumes:
+        - ${PWD}/wp-content:/var/www/html/wp-content
+      depends_on:
+        - reverseproxy
