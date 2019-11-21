@@ -26,8 +26,7 @@ services:
       image: iita/akilimo-compute:latest
       restart: on-failure
       volumes:
-        # - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/
-        - /root/projects/akilimo_recommendation:/root/projects/akilimo_recommendation
+        - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/
         # - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
         # - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
       # depends_on:
