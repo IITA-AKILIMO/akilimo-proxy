@@ -1,0 +1,91 @@
+version: '3'
+
+services:
+    reverseproxy:
+        image: nginx:alpine
+        ports:
+            - 80:80
+            - 443:443
+        restart: always
+        volumes:
+          - ./nginx-proxy-no-plumber.conf:/etc/nginx/nginx.conf:ro
+
+    nginx:
+        depends_on:
+            - reverseproxy
+        image: nginx:alpine
+        restart: always
+
+    apache:
+        depends_on:
+            - reverseproxy
+        image: httpd:alpine
+        restart: always
+
+    spring:
+      depends_on:
+          - reverseproxy
+          - db
+      image: iita/acai-akilimo-api:latest
+      restart: always
+      environment:
+        - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+        - CROP_DATABASE_URL=${CROP_DATABASE_URL}
+        - CROP_DATABASE_USERNAME=${CROP_DATABASE_USERNAME}
+        - CROP_DATABASE_PASSWORD=${CROP_DATABASE_PASSWORD}
+        - DEMO_MODE=${DEMO_MODE}
+        - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
+        - TZ_ENDPOINT=${TZ_ENDPOINT}
+        - TZ_DEMO_ENDPOINT=${TZ_DEMO_ENDPOINT}
+        - NG_DEMO_ENDPOINT=${NG_DEMO_ENDPOINT}
+        - NG_ENDPOINT=${NG_ENDPOINT}
+        - VERIFY_CERT=${VERIFY_CERT}
+        - MS_WEBHOOK=${MS_WEBHOOK}
+        - TZS_USD_RATE=${TZS_USD_RATE}
+        - NGN_USD_RATE=${NGN_USD_RATE}
+        - KES_USD_RATE=${KES_USD_RATE}
+        - MS_TEST_NUMBERS=${MS_TEST_NUMBERS}
+        - INFOBIP_ENDPOINT=${INFOBIP_ENDPOINT}
+        - INFOBIP_SENDER=${INFOBIP_SENDER}
+        - INFOBIP_USER_NAME=${INFOBIP_USER_NAME}
+        - INFOBIP_USER_PASS=${INFOBIP_USER_PASS}
+        - INFOBIP_AUTH_KEY=${INFOBIP_AUTH_KEY}
+        - PLIVO_ENDPOINT=${PLIVO_ENDPOINT}
+        - PLIVO_AUTH_KEY=${PLIVO_AUTH_KEY}
+        - PLIVO_AUTH_ID=${PLIVO_AUTH_ID}
+        - PLIVO_SENDER=${PLIVO_SENDER}
+
+    db:
+      image: mariadb:10.2
+      container_name: db
+      restart: on-failure
+      environment:
+        MYSQL_ROOT_HOST: "%"
+        MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
+        MYSQL_DATABASE: ${CROP_DATABASE}
+        MYSQL_USER: ${CROP_DATABASE_USERNAME}
+        MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      volumes:
+        - ${PWD}/database:/var/lib/mysql
+      labels:
+        - traefik.enable=true
+
+    frontend:
+      image: wordpress:5.2.2-php7.2-apache
+      depends_on:
+        - reverseproxy
+        - db
+      restart: always
+      environment:
+        WORDPRESS_DB_HOST: db
+        WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
+        WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
+        WORDPRESS_DB_NAME: ${CROP_DATABASE}
+        WORDPRESS_TABLE_PREFIX: "wrdp"
+      labels:
+        - traefik.backend=blog
+        - traefik.frontend.rule=Host:${DOMAIN}
+        - traefik.docker.network=web
+        - traefik.port=80
+      volumes:
+        - ${PWD}/wp-content:/var/www/html/wp-content
