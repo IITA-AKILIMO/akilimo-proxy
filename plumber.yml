@@ -1,0 +1,12 @@
+version: '3'
+services:
+  plumber:
+    container_name: plumber
+    image: iita/akilimo-compute:latest
+    expose:
+      - "8000"
+    restart: on-failure
+    volumes:
+    - /home/akilimo/projects/akilimo_recommendation:/home/akilimo/projects/akilimo_recommendation:rw
+    - /home/akilimo/projects/gisdata:/home/akilimo/projects/gisdata:rw
+    - /home/akilimo/projects/currentyield:/home/akilimo/projects/currentyield:rw
