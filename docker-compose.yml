@@ -169,6 +169,16 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 9999:8080
+  logagent:
+    image: 'sematext/logagent:latest'
+    environment:
+      - LOGS_TOKEN=${YOUR_LOGS_TOKEN}
+      - LOGS_RECEIVER_URL="https://logsene-receiver.sematext.com"
+    cap_add:
+      - SYS_ADMIN
+    restart: always
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
 networks:
   internal:
     external: false
