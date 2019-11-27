@@ -170,7 +170,8 @@ services:
     ports:
       - 9999:8080
   logagent:
-    image: 'sematext/logagent:latest'
+    container_name: logagent
+    image: sematext/logagent:latest
     environment:
       - LOGS_TOKEN=${YOUR_LOGS_TOKEN}
       - LOG_GLOB=${LOG_GLOB}
