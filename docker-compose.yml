@@ -173,6 +173,7 @@ services:
     image: 'sematext/logagent:latest'
     environment:
       - LOGS_TOKEN=${YOUR_LOGS_TOKEN}
+      - LOG_GLOB=${LOG_GLOB}
       - LOGS_RECEIVER_URL="https://logsene-receiver.sematext.com"
     cap_add:
       - SYS_ADMIN
