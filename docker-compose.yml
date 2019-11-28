@@ -8,6 +8,8 @@ services:
     domainname: ${DOMAIN}
     #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
     restart: always
+    environment:
+      LOGSENE_ENABLED: "false"
     ports:
       - 80:80
       - 443:443
@@ -34,6 +36,7 @@ services:
       MYSQL_DATABASE: ${CROP_DATABASE}
       MYSQL_USER: ${CROP_DATABASE_USERNAME}
       MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      LOGSENE_ENABLED: "false"
     volumes:
       - ${PWD}/database:/var/lib/mysql
     labels:
@@ -49,6 +52,7 @@ services:
       ADMINER_DEFAULT_DB_NAME: ${CROP_DATABASE}
       ADMINER_DESIGN: nette
       ADMINER_PLUGINS: tables-filter tinymce
+      LOGSENE_ENABLED: "false"
     restart: on-failure
     links:
       - db:mysql
@@ -194,6 +198,7 @@ services:
       WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
       WORDPRESS_DB_NAME: ${CROP_DATABASE}
       WORDPRESS_TABLE_PREFIX: "wrdp"
+      LOGSENE_ENABLED: "false"
     links:
       - db:mysql
     labels:
@@ -219,7 +224,8 @@ services:
       - traefik.frontend.rule=Host:logs.${DOMAIN}
       - traefik.docker.network=web
     environment:
-      - DOZZLE_TAILSIZE=100
+      DOZZLE_TAILSIZE: 100
+      LOGSENE_ENABLED: "false"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
