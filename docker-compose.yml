@@ -214,37 +214,6 @@ services:
     depends_on:
       - db
       - traefik
-
-  dozzle:
-    container_name: dozzle
-    image: amir20/dozzle:latest
-    labels:
-      - traefik.enable=true
-      - traefik.backend=dozzle
-      - traefik.frontend.rule=Host:logs.${DOMAIN}
-      - traefik.docker.network=web
-    environment:
-      DOZZLE_TAILSIZE: 100
-      LOGSENE_ENABLED: "false"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - 9999:8080
-    networks:
-      - web
-      - internal
-  logagent:
-    container_name: logagent
-    image: sematext/logagent:latest
-    environment:
-      - LOGS_TOKEN=${YOUR_LOGS_TOKEN}
-      - LOG_GLOB=${LOG_GLOB}
-      - LOGS_RECEIVER_URL="https://logsene-receiver.sematext.com"
-    cap_add:
-      - SYS_ADMIN
-    restart: always
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock'
 networks:
   internal:
     external: false
