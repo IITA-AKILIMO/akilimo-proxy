@@ -38,6 +38,7 @@ services:
       MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
       LOGSENE_ENABLED: "false"
     volumes:
+      - ./init.sql:/data/application/init.sql
       - ${PWD}/database:/var/lib/mysql
     labels:
       - traefik.enable=true
