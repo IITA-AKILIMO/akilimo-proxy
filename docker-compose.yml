@@ -39,8 +39,8 @@ services:
       MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
       LOGSENE_ENABLED: "false"
       REMOTE_SQL: ${PWD}/init.sql
-    volumes:
-      - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
+    # volumes:
+      # - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
       # - ${PWD}/db_data:/var/lib/mysql
     labels:
       - traefik.enable=true
