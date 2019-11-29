@@ -40,7 +40,7 @@ services:
       LOGSENE_ENABLED: "false"
       REMOTE_SQL: ${PWD}/init.sql
     # volumes:
-      # - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
+      - ${PWD}/mysql-init-files:/config/initdb.d/
       # - ${PWD}/db_data:/var/lib/mysql
     labels:
       - traefik.enable=true
