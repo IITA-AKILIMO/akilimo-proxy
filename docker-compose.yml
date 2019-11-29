@@ -27,8 +27,8 @@ services:
     networks:
       - web
   db:
-    # image: mariadb:10.2
-    image: linuxserver/mariadb
+    image: mariadb:10.2
+    # image: linuxserver/mariadb
     container_name: db
     restart: on-failure
     environment:
@@ -40,7 +40,8 @@ services:
       LOGSENE_ENABLED: "false"
       REMOTE_SQL: ${PWD}/init.sql
     volumes:
-      - ${PWD}/mysql-init-files:/config/initdb.d/
+      - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
+      # - ${PWD}/mysql-init-files:/config/initdb.d/
       # - ${PWD}/db_data:/var/lib/mysql
     labels:
       - traefik.enable=true
