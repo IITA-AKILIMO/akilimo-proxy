@@ -41,7 +41,7 @@ services:
       REMOTE_SQL: ${PWD}/init.sql
     volumes:
       - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
-      - ${PWD}/db_data:/var/lib/mysql
+      # - ${PWD}/db_data:/var/lib/mysql
     labels:
       - traefik.enable=true
     networks:
