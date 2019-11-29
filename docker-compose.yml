@@ -39,7 +39,7 @@ services:
       MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
       LOGSENE_ENABLED: "false"
       REMOTE_SQL: ${PWD}/init.sql
-    # volumes:
+    volumes:
       - ${PWD}/mysql-init-files:/config/initdb.d/
       # - ${PWD}/db_data:/var/lib/mysql
     labels:
