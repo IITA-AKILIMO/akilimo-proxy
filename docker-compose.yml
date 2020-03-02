@@ -75,7 +75,8 @@ services:
       - db
   spring:
     container_name: spring
-    image: iita/acai-akilimo-api:latest
+    image: iita/iita-akilimo-api:latest
+#    image: iita/acai-akilimo-api:latest
     restart: on-failure
     ports:
       #- "8098-8200:8098"
