@@ -1,20 +1,15 @@
 version: '3.3'
 
 services:
-  nginx:
-    image: nginx:latest
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - pspdfkit
-    ports:
-      - "4000:4000"
   traefik:
     image: traefik:1.7.8-alpine
+    # image: traefik:v2.0.5
     container_name: traefik
     domainname: ${DOMAIN}
     #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
     restart: always
+    environment:
+      LOGSENE_ENABLED: "false"
     ports:
       - 80:80
       - 443:443
@@ -33,6 +28,7 @@ services:
       - web
   db:
     image: mariadb:10.2
+    # image: linuxserver/mariadb
     container_name: db
     restart: on-failure
     environment:
@@ -41,8 +37,12 @@ services:
       MYSQL_DATABASE: ${CROP_DATABASE}
       MYSQL_USER: ${CROP_DATABASE_USERNAME}
       MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
+      LOGSENE_ENABLED: "false"
+      REMOTE_SQL: ${PWD}/init.sql
     volumes:
-      - ${PWD}/database:/var/lib/mysql
+      - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
+      # - ${PWD}/mysql-init-files:/config/initdb.d/
+      - ${PWD}/db_data:/var/lib/mysql
     labels:
       - traefik.enable=true
     networks:
@@ -56,6 +56,7 @@ services:
       ADMINER_DEFAULT_DB_NAME: ${CROP_DATABASE}
       ADMINER_DESIGN: nette
       ADMINER_PLUGINS: tables-filter tinymce
+      LOGSENE_ENABLED: "false"
     restart: on-failure
     links:
       - db:mysql
@@ -119,17 +120,64 @@ services:
     networks:
       - web
       - internal
+
+  akilimo-spring:
+    container_name: akilimo-spring
+    image: iita/akilimo-spring:latest
+    restart: on-failure
+    ports:
+      - 8099:8098
+    volumes:
+      - ${PWD}/log:/log
+    labels:
+      - traefik.enable=true
+      - traefik.backend=spring
+      - traefik.frontend.rule=Host:spring.${DOMAIN}
+      - traefik.docker.network=web
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - CROP_DATABASE_URL=${CROP_DATABASE_URL_2}
+      - CROP_DATABASE_USERNAME=${CROP_DATABASE_USERNAME}
+      - CROP_DATABASE_PASSWORD=${CROP_DATABASE_PASSWORD}
+      - DEMO_MODE=${DEMO_MODE}
+      - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
+      - TZ_ENDPOINT=${TZ_ENDPOINT}
+      - TZ_DEMO_ENDPOINT=${TZ_DEMO_ENDPOINT}
+      - NG_DEMO_ENDPOINT=${NG_DEMO_ENDPOINT}
+      - NG_ENDPOINT=${NG_ENDPOINT}
+      - VERIFY_CERT=${VERIFY_CERT}
+      - MS_WEBHOOK=${MS_WEBHOOK}
+      - TZS_USD_RATE=${TZS_USD_RATE}
+      - NGN_USD_RATE=${NGN_USD_RATE}
+      - KES_USD_RATE=${KES_USD_RATE}
+      - MS_TEST_NUMBERS=${MS_TEST_NUMBERS}
+      - INFOBIP_ENDPOINT=${INFOBIP_ENDPOINT}
+      - INFOBIP_SENDER=${INFOBIP_SENDER}
+      - INFOBIP_USER_NAME=${INFOBIP_USER_NAME}
+      - INFOBIP_USER_PASS=${INFOBIP_USER_PASS}
+      - INFOBIP_AUTH_KEY=${INFOBIP_AUTH_KEY}
+      - PLIVO_ENDPOINT=${PLIVO_ENDPOINT}
+      - PLIVO_AUTH_KEY=${PLIVO_AUTH_KEY}
+      - PLIVO_AUTH_ID=${PLIVO_AUTH_ID}
+      - PLIVO_SENDER=${PLIVO_SENDER}
+    depends_on:
+      - traefik
+      - db
+      - plumber
+    networks:
+      - web
+      - internal
+
+
   plumber:
-    #container_name: plumber
+    container_name: plumber
     #image: tsobu/plumber-cropmanager:release-2.0
     #image: tsobu/plumber-cropmanager:latest
     image: iita/akilimo-compute:latest
     #    image: iita/akilimo-compute:full
     restart: on-failure
-    #ports:
-    #  - 8000:8000
-    expose:
-      - "8000"
+    ports:
+      - 8000:8000
     labels:
       - traefik.enable=true
       - traefik.backend=plumber
@@ -146,14 +194,16 @@ services:
       - internal
   site:
     container_name: site
-    image: wordpress:5.2.2-php7.2-apache
+    # image: wordpress:5.2.2-php7.2-apache
+    image: wordpress:5.3-php7.2-apache
     restart: always
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
       WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
-      WORDPRESS_DB_NAME: ${CROP_DATABASE}
-      WORDPRESS_TABLE_PREFIX: "wrdp"
+      WORDPRESS_DB_NAME: ${SITE_DATABASE}
+      WORDPRESS_TABLE_PREFIX: "wrdp_"
+      LOGSENE_ENABLED: "false"
     links:
       - db:mysql
     labels:
@@ -169,6 +219,31 @@ services:
     depends_on:
       - db
       - traefik
+
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    environment:
+      DOZZLE_TAILSIZE: 100
+      LOGSENE_ENABLED: "false"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9999:8080
+
+  logagent:
+    container_name: logagent
+    image: sematext/logagent:latest
+    environment:
+      - LOGS_TOKEN=${YOUR_LOGS_TOKEN}
+      - LOG_GLOB=${LOG_GLOB}
+      - LOGS_RECEIVER_URL="https://logsene-receiver.sematext.com"
+    cap_add:
+      - SYS_ADMIN
+    restart: always
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+
 networks:
   internal:
     external: false
