@@ -38,7 +38,7 @@ services:
       MYSQL_USER: ${CROP_DATABASE_USERNAME}
       MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
       LOGSENE_ENABLED: "false"
-      REMOTE_SQL: ${PWD}/init.sql
+      REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
     volumes:
       - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
       # - ${PWD}/mysql-init-files:/config/initdb.d/
