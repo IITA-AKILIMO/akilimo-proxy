@@ -40,10 +40,10 @@ services:
       MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
       LOGSENE_ENABLED: "false"
       REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
-      labels:
-        - traefik.enable=true
-      networks:
-        - internal
+    labels:
+      - traefik.enable=true
+    networks:
+      - internal
 #  dbs:
 #    image: mariadb:10.2
 #    # image: linuxserver/mariadb
