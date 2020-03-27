@@ -140,7 +140,7 @@ services:
     container_name: dozzle
     image: amir20/dozzle:latest
     environment:
-      DOZZLE_TAILSIZE: 100
+      DOZZLE_TAILSIZE: 500
       LOGSENE_ENABLED: "false"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
