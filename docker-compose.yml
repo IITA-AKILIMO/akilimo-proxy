@@ -44,27 +44,6 @@ services:
       - traefik.enable=true
     networks:
       - internal
-#  dbs:
-#    image: mariadb:10.2
-#    # image: linuxserver/mariadb
-#    container_name: db
-#    restart: always
-#    environment:
-#      MYSQL_ROOT_HOST: "%"
-#      MYSQL_ROOT_PASSWORD: ${CROP_DATABASE_PASSWORD}
-#      MYSQL_DATABASE: ${CROP_DATABASE}
-#      MYSQL_USER: ${CROP_DATABASE_USERNAME}
-#      MYSQL_PASSWORD: ${CROP_DATABASE_PASSWORD}
-#      LOGSENE_ENABLED: "false"
-#      REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
-#    volumes:
-#      - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
-#      # - ${PWD}/mysql-init-files:/config/initdb.d/
-#      - ${PWD}/db_data2:/var/lib/mysql
-#    labels:
-#      - traefik.enable=true
-#    networks:
-#      - internal
   adminer:
     container_name: adminer
     image: adminer
@@ -157,33 +136,6 @@ services:
   #   networks:
   #     - web
   #     - internal
-  site:
-    container_name: site
-    image: wordpress:5.3-php7.2-apache
-    restart: always
-    environment:
-      WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_PASSWORD: ${CROP_DATABASE_PASSWORD}
-      WORDPRESS_DB_USER: ${CROP_DATABASE_USERNAME}
-      WORDPRESS_DB_NAME: ${SITE_DATABASE}
-      WORDPRESS_TABLE_PREFIX: "wrdp_"
-      LOGSENE_ENABLED: "false"
-    links:
-      - db:mysql
-    labels:
-      - traefik.backend=blog
-      - traefik.frontend.rule=Host:${DOMAIN}
-      - traefik.docker.network=web
-      - traefik.port=80
-    volumes:
-      - ${PWD}/wp-content:/var/www/html/wp-content
-    networks:
-      - internal
-      - web
-    depends_on:
-      - db
-      - traefik
-
   dozzle:
     container_name: dozzle
     image: amir20/dozzle:latest
