@@ -27,6 +27,7 @@ services:
     networks:
       - web
   db:
+    container_name: db
     image: mysql:5.7
     volumes:
       - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
