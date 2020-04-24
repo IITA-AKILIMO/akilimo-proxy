@@ -7,7 +7,7 @@ services:
     container_name: traefik
     domainname: ${DOMAIN}
     #command: --api --docker  # Enables the web UI and tells Traefik to listen to docker
-    restart: always
+    restart: on-failure
     environment:
       LOGSENE_ENABLED: "false"
     ports:
@@ -107,10 +107,6 @@ services:
       - INFOBIP_USER_NAME=${INFOBIP_USER_NAME}
       - INFOBIP_USER_PASS=${INFOBIP_USER_PASS}
       - INFOBIP_AUTH_KEY=${INFOBIP_AUTH_KEY}
-      - PLIVO_ENDPOINT=${PLIVO_ENDPOINT}
-      - PLIVO_AUTH_KEY=${PLIVO_AUTH_KEY}
-      - PLIVO_AUTH_ID=${PLIVO_AUTH_ID}
-      - PLIVO_SENDER=${PLIVO_SENDER}
     depends_on:
       - traefik
       - db
