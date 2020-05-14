@@ -81,19 +81,21 @@ services:
     networks:
       - web
       - internal
-   compute-prod:
-     container_name: compute-prod
-     image: iita/akilimo-compute:production
-     restart: on-failure
-     ports:
-       - 8000:8000
-     volumes:
-       - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
-       - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
-       - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
-     networks:
-       - web
-       - internal
+
+  compute-prod:
+    container_name: compute-prod
+    image: iita/akilimo-compute:production
+    restart: on-failure
+    ports:
+      - 8100:8000
+    volumes:
+      - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
+      - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
+      - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
+    networks:
+      - web
+      - internal
+
   compute-dev:
     container_name: compute-dev
     image: iita/akilimo-compute:latest
