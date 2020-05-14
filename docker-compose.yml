@@ -38,8 +38,8 @@ services:
       - internal
     depends_on:
       - db
-  spring:
-    container_name: spring
+  akilimo-api:
+    container_name: akilimo-api
     image: iita/iita-akilimo-api:latest
     restart: on-failure
     ports:
@@ -71,7 +71,7 @@ services:
       - web
       - internal
 
-  compute-prod:
+  akilimo-compute-prod:
     container_name: compute-prod
     image: iita/akilimo-compute:production
     restart: on-failure
@@ -85,7 +85,7 @@ services:
       - web
       - internal
 
-  compute-dev:
+  akilimo-compute-dev:
     container_name: compute-dev
     image: iita/akilimo-compute:latest
     restart: on-failure
