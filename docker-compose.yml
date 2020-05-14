@@ -33,11 +33,6 @@ services:
       - db:mysql
     ports:
       - 9080:8080
-    labels:
-      - traefik.enable=true
-      - traefik.backend=adminer
-      - traefik.frontend.rule=Host:adminer.${DOMAIN}
-      - traefik.docker.network=web
     networks:
       - web
       - internal
@@ -48,15 +43,9 @@ services:
     image: iita/iita-akilimo-api:latest
     restart: on-failure
     ports:
-      #- "8098-8200:8098"
       - 8098:8098
     volumes:
       - ${PWD}/log:/log
-    labels:
-      - traefik.enable=true
-      - traefik.backend=spring
-      - traefik.frontend.rule=Host:spring.${DOMAIN}
-      - traefik.docker.network=web
     environment:
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - CROP_DATABASE_URL=${CROP_DATABASE_URL}
