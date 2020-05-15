@@ -76,7 +76,7 @@ services:
     image: iita/akilimo-compute:production
     restart: on-failure
     ports:
-      - 8100:8000
+      - 8000:8000
     volumes:
       - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
       - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
