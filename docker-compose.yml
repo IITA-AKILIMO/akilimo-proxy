@@ -80,7 +80,7 @@ services:
     environment:
       - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
     ports:
-      - 8000:8000
+      - 8100:8000
     volumes:
       - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
       - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
@@ -96,7 +96,7 @@ services:
     environment:
       - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
     ports:
-      - 8100:8000
+      - 8000:8000
     volumes:
       - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
       - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
