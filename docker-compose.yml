@@ -102,6 +102,7 @@ services:
       - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
       - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
       - /usr/lib/rstudio-server/bin/pandoc:/usr/lib/rstudio-server/bin/pandoc
+      - /tmp:/tmp
     networks:
       - web
       - internal
