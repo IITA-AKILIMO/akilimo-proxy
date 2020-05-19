@@ -77,6 +77,8 @@ services:
     container_name: compute-prod
     image: iita/akilimo-compute:production
     restart: on-failure
+    environment:
+      - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
     ports:
       - 8000:8000
     volumes:
@@ -91,6 +93,8 @@ services:
     container_name: compute-dev
     image: iita/akilimo-compute:latest
     restart: on-failure
+    environment:
+      - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
     ports:
       - 8100:8000
     volumes:
