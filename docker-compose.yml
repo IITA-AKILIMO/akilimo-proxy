@@ -73,7 +73,7 @@ services:
       - web
       - internal
 
-  akilimo-compute-prod:
+  compute-prod:
     container_name: compute-prod
     image: iita/akilimo-compute:production
     restart: on-failure
@@ -89,7 +89,7 @@ services:
       - web
       - internal
 
-  akilimo-compute-dev:
+  compute-dev:
     container_name: compute-dev
     image: iita/akilimo-compute:latest
     restart: on-failure
