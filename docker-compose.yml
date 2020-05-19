@@ -101,6 +101,7 @@ services:
       - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
       - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
       - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
+      - /usr/lib/rstudio-server/bin/pandoc:/usr/lib/rstudio-server/bin/pandoc
     networks:
       - web
       - internal
