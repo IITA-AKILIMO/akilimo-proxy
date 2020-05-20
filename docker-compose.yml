@@ -40,7 +40,7 @@ services:
       - db
   akilimo-api:
     container_name: akilimo-api
-    image: iita/iita-akilimo-api:latest
+    image: iita/iita-akilimo-api:${API_VERSION_TAG}
     restart: on-failure
     ports:
       - 8098:8098
@@ -75,12 +75,12 @@ services:
 
   compute-prod:
     container_name: compute-prod
-    image: iita/akilimo-compute:production
+    image: iita/akilimo-compute:${COMPUTE_PRODUCTION_TAG}
     restart: on-failure
     environment:
       - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
     ports:
-      - 8100:8000
+      - 8000:8000
     volumes:
       - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
       - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
@@ -91,19 +91,16 @@ services:
 
   compute-dev:
     container_name: compute-dev
-    image: iita/akilimo-compute:latest
+    image: iita/akilimo-compute:${COMPUTE_DEV_TAG}
     restart: on-failure
     environment:
       - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
     ports:
-      - 8000:8000
+      - 8090:8000
     volumes:
       - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
       - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
       - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
-      #- /home/akilimo/bin:/home/akilimo/bin/
-      #- /usr/lib/rstudio-server/bin/pandoc:/usr/lib/rstudio-server/bin/pandoc
-      #- /tmp:/tmp
     networks:
       - web
       - internal
