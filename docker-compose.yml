@@ -96,7 +96,7 @@ services:
     environment:
       - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
     ports:
-      - 8090:8000
+      - 8090:8090
     volumes:
       - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
       - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
