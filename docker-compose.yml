@@ -89,21 +89,21 @@ services:
       - web
       - internal
 
-  compute-dev:
-    container_name: compute-dev
-    image: iita/akilimo-compute:${COMPUTE_DEV_TAG}
-    restart: on-failure
-    environment:
-      - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
-    ports:
-      - 8090:8090
-    volumes:
-      - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
-      - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
-      - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
-    networks:
-      - web
-      - internal
+#  compute-dev:
+#    container_name: compute-dev
+#    image: iita/akilimo-compute:${COMPUTE_DEV_TAG}
+#    restart: on-failure
+#    environment:
+#      - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
+#    ports:
+#      - 8090:8090
+#    volumes:
+#      - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
+#      - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
+#      - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
+#    networks:
+#      - web
+#      - internal
   dozzle:
     container_name: dozzle
     image: amir20/dozzle:latest
