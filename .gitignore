@@ -13,3 +13,5 @@ currentyield/*
 install_pkg.R
 log/*
 .phploy
+.revision
+*.sql
