@@ -72,21 +72,21 @@ services:
       - web
       - internal
 
-  compute-prod:
-    container_name: compute-prod
-    image: iita/akilimo-compute:${COMPUTE_PRODUCTION_TAG}
-    restart: on-failure
-    environment:
-      - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
-    ports:
-      - 8000:8000
-    volumes:
-      - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
-      - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
-      - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
-    networks:
-      - web
-      - internal
+#  compute-prod:
+#    container_name: compute-prod
+#    image: iita/akilimo-compute:${COMPUTE_PRODUCTION_TAG}
+#    restart: on-failure
+#    environment:
+#      - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
+#    ports:
+#      - 8000:8000
+#    volumes:
+#      - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
+#      - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
+#      - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
+#    networks:
+#      - web
+#      - internal
 
   #  compute-dev:
   #    container_name: compute-dev
