@@ -27,7 +27,6 @@ services:
       ADMINER_DEFAULT_DB_NAME: ${CROP_DATABASE}
       ADMINER_DESIGN: nette
       ADMINER_PLUGINS: tables-filter tinymce
-      LOGSENE_ENABLED: "false"
     restart: on-failure
     links:
       - db:mysql
