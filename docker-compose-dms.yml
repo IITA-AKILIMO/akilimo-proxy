@@ -13,6 +13,7 @@ services:
     restart: on-failure
     links:
       - mysql-ld:mysql
+      - db: mysql
     ports:
       - 9080:8080
     depends_on:
@@ -32,6 +33,22 @@ services:
     environment:
       - LDOC_MEMORY=2000
 
+  db:
+    container_name: db
+    image: mysql:8.0
+    volumes:
+      - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
+      - ${PWD}/db_data:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_USER: ${DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      LOGSENE_ENABLED: "false"
+      REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
+
   mysql-ld: 
     image: mysql:8.0
     container_name: mysql-ld
@@ -43,7 +60,39 @@ services:
       - MYSQL_DATABASE=logicaldoc
       - MYSQL_USER=ldoc
       - MYSQL_PASSWORD=changeme
-   
+
+  akilimo-api:
+    container_name: akilimo-api
+    image: iita/iita-akilimo-api:${API_VERSION_TAG}
+    restart: on-failure
+    ports:
+      - 8098:8098
+    volumes:
+      - ${PWD}/log:/log
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - CROP_DATABASE_URL=${DATABASE_URL}
+      - CROP_DATABASE_USERNAME=${DATABASE_USERNAME}
+      - CROP_DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - SMS_USER=${SMS_USER}
+      - SMS_TOKEN=${SMS_TOKEN}
+      - DEMO_MODE=${DEMO_MODE}
+      - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
+      - PLUMBER_DEV_ENDPOINT=${PLUMBER_DEV_ENDPOINT}
+      - TZ_ENDPOINT=${TZ_ENDPOINT}
+      - TZ_DEMO_ENDPOINT=${TZ_DEMO_ENDPOINT}
+      - NG_DEMO_ENDPOINT=${NG_DEMO_ENDPOINT}
+      - NG_ENDPOINT=${NG_ENDPOINT}
+      - VERIFY_CERT=${VERIFY_CERT}
+      - TZS_USD_RATE=${TZS_USD_RATE}
+      - NGN_USD_RATE=${NGN_USD_RATE}
+      - KES_USD_RATE=${KES_USD_RATE}
+      - RATE_TYPE=${RATE_TYPE}
+      - ENABLE_RATE_LIMIT=${ENABLE_RATE_LIMIT}
+      - RATE_LIMIT=${RATE_LIMIT}
+    depends_on:
+      - db
+      
   dozzle:
     container_name: dozzle
     image: amir20/dozzle:latest
