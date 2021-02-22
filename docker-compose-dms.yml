@@ -19,7 +19,7 @@ services:
     image: mysql:8.0
     volumes:
       - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
-      - ${PWD}/dms_db_data:/var/lib/mysql
+      - ${PWD}/dms/db_data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=example
       - MYSQL_DATABASE=logicaldoc
