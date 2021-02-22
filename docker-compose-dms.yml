@@ -35,6 +35,7 @@ services:
 
   mysql-ld: 
     image: mysql:8.0
+    container_name: mysql-ld
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
@@ -42,7 +43,9 @@ services:
       MYSQL_USER: ${DATABASE_USERNAME}
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
       REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
-
+    networks:
+      - internal
+      
 networks:
   internal:
     external: false
