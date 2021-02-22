@@ -8,7 +8,7 @@ services:
     environment:
       ADMINER_DEFAULT_DB_DRIVER: mysql
       ADMINER_DEFAULT_DB_HOST: mysql-ld
-      ADMINER_DEFAULT_DB_NAME: logicaldoc
+      ADMINER_DEFAULT_DB_NAME: akilimo_dms
       ADMINER_DESIGN: nette
       ADMINER_PLUGINS: tables-filter tinymce
     restart: on-failure
@@ -30,15 +30,18 @@ services:
     ports:
       - 8080:8080
     environment:
-      - LDOC_MEMORY=2000
+      LDOC_MEMORY: 2000
+      DB_NAME: akilimo_dms
 
   mysql-ld: 
     image: mysql:8.0
     environment:
-      - MYSQL_ROOT_PASSWORD=example
-      - MYSQL_DATABASE=logicaldoc
-      - MYSQL_USER=ldoc
-      - MYSQL_PASSWORD=changeme
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_USER: ${DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
 
 networks:
   internal:
