@@ -43,6 +43,9 @@ services:
   dms:
     container_name: dms
     image: logicaldoc/logicaldoc-ce
+    volumes:
+    - ${PWD}/dms/logicaldoc-conf:/opt/logicaldoc/conf'
+    - ${PWD}/dms/logicaldoc-repo:/opt/logicaldoc/repository'
     command: ["./wait-for-it.sh", "db:3306", "-t", "30", "--", "/opt/logicaldoc/start-logicaldoc.sh", "run"]
     depends_on: 
       - db
