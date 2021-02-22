@@ -53,12 +53,12 @@ services:
     ports:
       - 9100:8080
     environment:
-      - DB_HOST=mysql-ld
-      - DB_ENGINE=mysql
-      - DB_NAME=akilimo_dms
-      - MYSQL_USER=${DATABASE_USERNAME}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
-      - LDOC_MEMORY=2000
+      DB_HOST: mysql-ld
+      DB_ENGINE: mysql
+      DB_NAME: akilimo_dms
+      MYSQL_USER: ${DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      LDOC_MEMORY: 2000
     networks:
       - web
       - internal
