@@ -15,9 +15,6 @@ services:
       - mysql-ld:mysql
     ports:
       - 9080:8080
-    networks:
-      - web
-      - internal
     depends_on:
       - mysql-ld
 
