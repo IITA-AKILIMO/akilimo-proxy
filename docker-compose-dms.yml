@@ -8,7 +8,7 @@ services:
     environment:
       ADMINER_DEFAULT_DB_DRIVER: mysql
       ADMINER_DEFAULT_DB_HOST: mysql-ld
-      ADMINER_DEFAULT_DB_NAME: ${logicaldoc}
+      ADMINER_DEFAULT_DB_NAME: logicaldoc
       ADMINER_DESIGN: nette
       ADMINER_PLUGINS: tables-filter tinymce
     restart: on-failure
