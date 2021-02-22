@@ -22,7 +22,7 @@ services:
     depends_on:
       - mysql-ld
   
-   logicaldoc:
+  logicaldoc:
     depends_on:
       - mysql-ld
     command: ["./wait-for-it.sh", "mysql-ld:3306", "-t", "30", "--", "/opt/logicaldoc/start-logicaldoc.sh", "run"]
