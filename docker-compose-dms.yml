@@ -13,7 +13,7 @@ services:
     restart: on-failure
     links:
       - mysql-ld:mysql
-      - db: mysql
+      - db:mysql
     ports:
       - 9080:8080
     depends_on:
@@ -92,7 +92,7 @@ services:
       - RATE_LIMIT=${RATE_LIMIT}
     depends_on:
       - db
-      
+
   dozzle:
     container_name: dozzle
     image: amir20/dozzle:latest
