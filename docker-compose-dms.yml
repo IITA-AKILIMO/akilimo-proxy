@@ -1,12 +1,32 @@
 version: '3.3'
 
 services:
+  adminer:
+    container_name: adminer
+    image: adminer
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: mysql
+      ADMINER_DEFAULT_DB_HOST: mysql-ld
+      ADMINER_DEFAULT_DB_NAME: ${DATABASE}
+      ADMINER_DESIGN: nette
+      ADMINER_PLUGINS: tables-filter tinymce
+    restart: on-failure
+    links:
+      - mysql-ld:mysql
+    ports:
+      - 9080:8080
+    networks:
+      - web
+      - internal
+    depends_on:
+      - mysql-ld
 
   logicaldoc:
+    image: logicaldoc/logicaldoc-ce
+    container_name: logicaldoc
     depends_on:
       - mysql-ld
     command: ["./wait-for-it.sh", "mysql-ld:3306", "-t", "30", "--", "/opt/logicaldoc/start-logicaldoc.sh", "run"]
-    image: logicaldoc/logicaldoc-ce
     volumes:
       - ${PWD}/dms/logicaldoc-conf:/opt/logicaldoc/conf'
       - ${PWD}/dms/logicaldoc-repo:/opt/logicaldoc/repository'    
@@ -17,6 +37,7 @@ services:
 
   mysql-ld: 
     image: mysql:8.0
+    container_name: mysql-ld
     volumes:
       - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
       - ${PWD}/dms/db_data:/var/lib/mysql
