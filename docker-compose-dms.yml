@@ -1,0 +1,41 @@
+version: '3.3'
+
+services:
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    environment:
+      ADMINER_DEFAULT_DB_DRIVER: mysql
+      ADMINER_DEFAULT_DB_HOST: mysql-ld
+      ADMINER_DEFAULT_DB_NAME: ${logicaldoc}
+      ADMINER_DESIGN: nette
+      ADMINER_PLUGINS: tables-filter tinymce
+    restart: on-failure
+    links:
+      - mysql-ld:mysql
+    ports:
+      - 9081:8080
+    networks:
+      - web
+      - internal
+    depends_on:
+      - mysql-ld
+  
+   logicaldoc:
+    depends_on:
+      - mysql-ld
+    command: ["./wait-for-it.sh", "mysql-ld:3306", "-t", "30", "--", "/opt/logicaldoc/start-logicaldoc.sh", "run"]
+    image: logicaldoc/logicaldoc-ce
+    ports:
+      - 8080:8080
+    environment:
+      - LDOC_MEMORY=2000
+
+  mysql-ld: 
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_DATABASE=logicaldoc
+      - MYSQL_USER=ldoc
+      - MYSQL_PASSWORD=changeme
