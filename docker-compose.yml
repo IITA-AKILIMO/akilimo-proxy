@@ -1,37 +1,6 @@
 version: '3.3'
 
 services:
-  db:
-    container_name: db
-    image: mysql:5.7
-    volumes:
-      - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
-      - ${PWD}/db_data:/var/lib/mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE}
-      MYSQL_USER: ${DATABASE_USERNAME}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      LOGSENE_ENABLED: "false"
-      REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
-    networks:
-      - internal
-
-  openkm:
-    image: openkm/openkm-ce:6.3.9
-    container_name: openkm
-    ports:
-      - 9100:8080   
-    volumes:
-      - ${PWD}/openkm/server.xml:/opt/tomcat/conf/server.xml
-      - ${PWD}/openkm/OpenKM.cfg:/opt/tomcat/OpenKM.cfg
-      - ${PWD}/openkm/repository:/opt/tomcat/repository
-    depends_on:
-      - db
-    links:
-      - db:mysql
 
   adminer:
     container_name: adminer
@@ -52,6 +21,39 @@ services:
       - internal
     depends_on:
       - db
+  
+  db:
+    container_name: db
+    image: mysql:8.0
+    volumes:
+      - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
+      - ${PWD}/db_data:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_USER: ${DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      LOGSENE_ENABLED: "false"
+      REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
+    networks:
+      - internal
+  
+  dms:
+    image: logicaldoc/logicaldoc-ce
+    command: ["./wait-for-it.sh", "db:3306", "-t", "30", "--", "/opt/logicaldoc/start-logicaldoc.sh", "run"]
+    depends_on: 
+      - db
+    ports:
+      - 9100:8080
+    environment:
+      - DB_HOST=db
+      - LDOC_MEMORY=2000
+    networks:
+      - web
+      - internal
+
   akilimo-api:
     container_name: akilimo-api
     image: iita/iita-akilimo-api:${API_VERSION_TAG}
@@ -86,20 +88,7 @@ services:
     networks:
       - web
       - internal
-  # but it must map to 8080 on the container.
-  openkm:
-    image: mbagnall/openkm:mysql
-    container_name: openkm
-    environment:
-      OPEN_KM_URL: http://localhost:8080/OpenKM
-      OPEN_KM_BASE_URL: http://localhost:8080
-    ports:
-      - 9950:8080
-    volumes:
-      - ./data:/opt/tomcat-8.5.34/repository
-    depends_on:
-      - db
-    restart: unless-stopped
+
 #  compute-prod:
 #    container_name: compute-prod
 #    image: iita/akilimo-compute:${COMPUTE_PRODUCTION_TAG}
@@ -116,21 +105,6 @@ services:
 #      - web
 #      - internal
 
-  #  compute-dev:
-  #    container_name: compute-dev
-  #    image: iita/akilimo-compute:${COMPUTE_DEV_TAG}
-  #    restart: on-failure
-  #    environment:
-  #      - RSTUDIO_PANDOC=${RSTUDIO_PANDOC}
-  #    ports:
-  #      - 8090:8090
-  #    volumes:
-  #      - ${R_ROOT}/akilimo_recommendation:${R_ROOT}/akilimo_recommendation
-  #      - ${R_ROOT}/gisdata:${R_ROOT}/gisdata
-  #      - ${R_ROOT}/currentyield:${R_ROOT}/currentyield
-  #    networks:
-  #      - web
-  #      - internal
   dozzle:
     container_name: dozzle
     image: amir20/dozzle:latest
