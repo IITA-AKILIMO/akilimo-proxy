@@ -7,7 +7,7 @@ services:
     volumes:
       - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
       - ${PWD}/db_data:/var/lib/mysql
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
@@ -18,6 +18,21 @@ services:
       REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
     networks:
       - internal
+
+  openkm:
+    image: openkm/openkm-ce:6.3.9
+    container_name: openkm
+    ports:
+      - 9100:8080   
+    volumes:
+      - ${PWD}/openkm/server.xml:/opt/tomcat/conf/server.xml
+      - ${PWD}/openkm/OpenKM.cfg:/opt/tomcat/OpenKM.cfg
+      - ${PWD}/openkm/repository:/opt/tomcat/repository
+    depends_on:
+      - db
+    links:
+      - db:mysql
+
   adminer:
     container_name: adminer
     image: adminer
@@ -71,7 +86,20 @@ services:
     networks:
       - web
       - internal
-
+  # but it must map to 8080 on the container.
+  openkm:
+    image: mbagnall/openkm:mysql
+    container_name: openkm
+    environment:
+      OPEN_KM_URL: http://localhost:8080/OpenKM
+      OPEN_KM_BASE_URL: http://localhost:8080
+    ports:
+      - 9950:8080
+    volumes:
+      - ./data:/opt/tomcat-8.5.34/repository
+    depends_on:
+      - db
+    restart: unless-stopped
 #  compute-prod:
 #    container_name: compute-prod
 #    image: iita/akilimo-compute:${COMPUTE_PRODUCTION_TAG}
@@ -114,14 +142,7 @@ services:
     ports:
       - 9999:8080
 
-  logspout:
-    container_name: logspout
-    image: logdna/logspout:latest
-    restart: always
-    environment:
-      - LOGDNA_KEY=${LOG_DNA_KEY}
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock'
+
 networks:
   internal:
     external: false
