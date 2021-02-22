@@ -7,23 +7,23 @@ services:
     image: adminer
     environment:
       ADMINER_DEFAULT_DB_DRIVER: mysql
-      ADMINER_DEFAULT_DB_HOST: db
+      ADMINER_DEFAULT_DB_HOST: mysql-ld
       ADMINER_DEFAULT_DB_NAME: ${DATABASE}
       ADMINER_DESIGN: nette
       ADMINER_PLUGINS: tables-filter tinymce
     restart: on-failure
     links:
-      - db:mysql
+      - mysql-ld:mysql
     ports:
       - 9080:8080
     networks:
       - web
       - internal
     depends_on:
-      - db
+      - mysql-ld
   
-  db:
-    container_name: db
+  mysql-ld:
+    container_name: mysql-ld
     image: mysql:8.0
     volumes:
       - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
@@ -39,6 +39,7 @@ services:
       REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
     networks:
       - internal
+
   
   dms:
     container_name: dms
@@ -52,7 +53,7 @@ services:
     ports:
       - 9100:8080
     environment:
-      - DB_HOST=db
+      - DB_HOST=mysql-ld
       - DB_ENGINE=mysql
       - DB_NAME=akilimo_dms
       - MYSQL_USER=${DATABASE_USERNAME}
@@ -92,7 +93,7 @@ services:
       - ENABLE_RATE_LIMIT=${ENABLE_RATE_LIMIT}
       - RATE_LIMIT=${RATE_LIMIT}
     depends_on:
-      - db
+      - mysql-ld
     networks:
       - web
       - internal
