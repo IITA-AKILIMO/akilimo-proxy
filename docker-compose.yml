@@ -41,6 +41,7 @@ services:
       - internal
   
   dms:
+    container_name: dms
     image: logicaldoc/logicaldoc-ce
     command: ["./wait-for-it.sh", "db:3306", "-t", "30", "--", "/opt/logicaldoc/start-logicaldoc.sh", "run"]
     depends_on: 
