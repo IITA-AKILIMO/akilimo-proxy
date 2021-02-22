@@ -39,3 +39,9 @@ services:
       - MYSQL_DATABASE=logicaldoc
       - MYSQL_USER=ldoc
       - MYSQL_PASSWORD=changeme
+
+networks:
+  internal:
+    external: false
+  web:
+    external: true      
