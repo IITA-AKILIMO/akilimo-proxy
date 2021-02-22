@@ -49,7 +49,7 @@ services:
     - ${PWD}/dms/logicaldoc-repo:/opt/logicaldoc/repository'
     command: ["./wait-for-it.sh", "db:3306", "-t", "30", "--", "/opt/logicaldoc/start-logicaldoc.sh", "run"]
     depends_on: 
-      - db
+      - mysql-ld
     ports:
       - 9100:8080
     environment:
