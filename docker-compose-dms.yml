@@ -2,26 +2,6 @@ version: '3.3'
 
 services:
 
-  adminer:
-    container_name: adminer
-    image: adminer
-    environment:
-      ADMINER_DEFAULT_DB_DRIVER: mysql
-      ADMINER_DEFAULT_DB_HOST: mysql-ld
-      ADMINER_DEFAULT_DB_NAME: akilimo_dms
-      ADMINER_DESIGN: nette
-      ADMINER_PLUGINS: tables-filter tinymce
-    restart: on-failure
-    links:
-      - mysql-ld:mysql
-    ports:
-      - 9081:8080
-    networks:
-      - web
-      - internal
-    depends_on:
-      - mysql-ld
-  
   logicaldoc:
     depends_on:
       - mysql-ld
@@ -30,22 +10,15 @@ services:
     ports:
       - 8080:8080
     environment:
-      LDOC_MEMORY: 2000
-      DB_NAME: akilimo_dms
+      - LDOC_MEMORY=2000
 
   mysql-ld: 
     image: mysql:8.0
-    container_name: mysql-ld
     environment:
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE}
-      MYSQL_USER: ${DATABASE_USERNAME}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
-    networks:
-      - internal
-
+      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_DATABASE=logicaldoc
+      - MYSQL_USER=ldoc
+      - MYSQL_PASSWORD=changeme
    
   dozzle:
     container_name: dozzle
@@ -57,9 +30,4 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - 9999:8080   
-networks:
-  internal:
-    external: false
-  web:
-    external: true      
+      - 9999:8080 
