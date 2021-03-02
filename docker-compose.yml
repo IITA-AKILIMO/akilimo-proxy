@@ -71,6 +71,7 @@ services:
     volumes:
       - ${PWD}/log:/log
     environment:
+      - DEBUG=${DEBUG}
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
       - CROP_DATABASE_URL=${DATABASE_URL}
       - CROP_DATABASE_USERNAME=${DATABASE_USERNAME}
