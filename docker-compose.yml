@@ -8,7 +8,7 @@ services:
     environment:
       ADMINER_DEFAULT_DB_DRIVER: mysql
       ADMINER_DEFAULT_DB_HOST: db
-      ADMINER_DEFAULT_DB_NAME: ${DATABASE}
+      ADMINER_DEFAULT_DB_NAME: ${DB_NAME}
       ADMINER_DESIGN: nette
       ADMINER_PLUGINS: tables-filter tinymce
     restart: on-failure
@@ -31,11 +31,10 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
-      MYSQL_DATABASE: ${DATABASE}
-      MYSQL_USER: ${DATABASE_USERNAME}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
-      LOGSENE_ENABLED: "false"
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
       REMOTE_SQL: ${PWD}/mysql-init-files/init.sql
     networks:
       - internal
@@ -54,9 +53,9 @@ services:
     environment:
       - DB_HOST=db
       - DB_ENGINE=mysql
-      - DB_NAME=akilimo_dms
-      - MYSQL_USER=${DATABASE_USERNAME}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - DB_NAME=${LDOC_DB}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASS}
       - LDOC_MEMORY=2000
     networks:
       - web
@@ -64,40 +63,51 @@ services:
 
   akilimo-api:
     container_name: akilimo-api
-    image: iita/iita-akilimo-api:${API_VERSION_TAG}
+    image: iita/akilimo-api:${API_VERSION_TAG}
     restart: on-failure
-    ports:
-      - 8098:8098
     volumes:
       - ${PWD}/log:/log
     environment:
       - DEBUG=${DEBUG}
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
-      - CROP_DATABASE_URL=${DATABASE_URL}
-      - CROP_DATABASE_USERNAME=${DATABASE_USERNAME}
-      - CROP_DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DB_URL=${DB_URL}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
       - SMS_USER=${SMS_USER}
+      - SMS_PASS=${SMS_PASS}
       - SMS_TOKEN=${SMS_TOKEN}
-      - DEMO_MODE=${DEMO_MODE}
-      - PLUMBER_ENDPOINT=${PLUMBER_ENDPOINT}
-      - PLUMBER_DEV_ENDPOINT=${PLUMBER_DEV_ENDPOINT}
-      - TZ_ENDPOINT=${TZ_ENDPOINT}
-      - TZ_DEMO_ENDPOINT=${TZ_DEMO_ENDPOINT}
-      - NG_DEMO_ENDPOINT=${NG_DEMO_ENDPOINT}
-      - NG_ENDPOINT=${NG_ENDPOINT}
+      - PLUMBER_BASE=${PLUMBER_BASE}
+      - COMPUTE_NG=${COMPUTE_NG}
+      - COMPUTE_TZ=${NG_ENDPOINT}
       - VERIFY_CERT=${VERIFY_CERT}
-      - TZS_USD_RATE=${TZS_USD_RATE}
-      - NGN_USD_RATE=${NGN_USD_RATE}
-      - KES_USD_RATE=${KES_USD_RATE}
+      - TZS_USD_RATE=${TZS_USD}
+      - NGN_USD_RATE=${NGN_USD}
+      - KES_USD_RATE=${KES_USD}
       - RATE_TYPE=${RATE_TYPE}
-      - ENABLE_RATE_LIMIT=${ENABLE_RATE_LIMIT}
-      - RATE_LIMIT=${RATE_LIMIT}
+      - RATE_ENABLED=${RATE_ENABLED}
+      - MAX_REQUESTS=${MAX_REQUESTS}
     depends_on:
       - db
     networks:
       - web
       - internal
 
+    akilimo-migration:
+      container_name: akilimo-migration
+      image: iita/akilimo-migration:${API_VERSION_TAG}
+      restart: on-failure
+      volumes:
+        - ${PWD}/log:/log
+      environment:
+        - DEBUG=${DEBUG}
+        - DB_URL=${DB_URL}
+        - DB_USER=${DB_USER}
+        - DB_PASS=${DB_PASS}
+      depends_on:
+        - db
+      networks:
+        - web
+        - internal
 #  compute-prod:
 #    container_name: compute-prod
 #    image: iita/akilimo-compute:${COMPUTE_PRODUCTION_TAG}
