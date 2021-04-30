@@ -92,22 +92,22 @@ services:
       - web
       - internal
 
-    akilimo-migration:
-      container_name: akilimo-migration
-      image: iita/akilimo-migration:${API_VERSION_TAG}
-      restart: on-failure
-      volumes:
-        - ${PWD}/log:/log
-      environment:
-        - DEBUG=${DEBUG}
-        - DB_URL=${DB_URL}
-        - DB_USER=${DB_USER}
-        - DB_PASS=${DB_PASS}
-      depends_on:
-        - db
-      networks:
-        - web
-        - internal
+  akilimo-migration:
+    container_name: akilimo-migration
+    image: iita/akilimo-migration:${API_VERSION_TAG}
+    restart: on-failure
+    volumes:
+      - ${PWD}/log:/log
+    environment:
+      - DEBUG=${DEBUG}
+      - DB_URL=${DB_URL}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    depends_on:
+      - db
+    networks:
+      - web
+      - internal
 #  compute-prod:
 #    container_name: compute-prod
 #    image: iita/akilimo-compute:${COMPUTE_PRODUCTION_TAG}
