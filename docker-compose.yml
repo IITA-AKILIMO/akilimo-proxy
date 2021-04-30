@@ -31,7 +31,7 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
@@ -101,8 +101,8 @@ services:
     environment:
       - DEBUG=${DEBUG}
       - DB_URL=${DB_URL}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
+      - DB_USER=${DB_ROOT_USER}
+      - DB_PASS=${DB_ROOT_PASS}
     depends_on:
       - db
     networks:
