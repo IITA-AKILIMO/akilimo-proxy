@@ -65,6 +65,8 @@ services:
     container_name: akilimo-api
     image: iita/akilimo-service:${API_VERSION_TAG}
     restart: on-failure
+    ports:
+      - 8098:8098
     volumes:
       - ${PWD}/log:/log
     environment:
