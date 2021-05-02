@@ -63,7 +63,7 @@ services:
 
   akilimo-api:
     container_name: akilimo-api
-    image: iita/akilimo-api:${API_VERSION_TAG}
+    image: iita/akilimo-service:${API_VERSION_TAG}
     restart: on-failure
     volumes:
       - ${PWD}/log:/log
