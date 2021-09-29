@@ -52,7 +52,8 @@ services:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
     ports:
-      - 9650:8080
+      #- 9650:8080
+      - 9650:8443
     depends_on:
       - db
     networks:
