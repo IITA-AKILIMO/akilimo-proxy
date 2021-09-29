@@ -39,6 +39,25 @@ services:
     networks:
       - internal
 
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:15.0.2
+    restart: unless-stopped
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: db
+      DB_DATABASE: keycloak
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASS}    
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    ports:
+      8098:8080
+    depends_on:
+      - db
+    networks:
+      - web
+      - internal
   # dms:
   #   container_name: dms
   #   image: logicaldoc/logicaldoc-ce
@@ -137,7 +156,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 9999:8080
-
 
 networks:
   internal:
