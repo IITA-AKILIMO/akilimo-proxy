@@ -68,7 +68,7 @@ services:
       - 8098:8098
     volumes:
       - ${PWD}/log:/log
-      - /mnt/extra_storage/ona_data:/ona_data
+      - /mnt/extra_storage/ona_data:/mnt/extra_storage/ona_data
     environment:
       - DEBUG=${DEBUG}
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
