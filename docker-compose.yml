@@ -39,44 +39,23 @@ services:
     networks:
       - internal
 
-  keycloak:
-    container_name: keycloak
-    image: quay.io/keycloak/keycloak:15.0.2
-    restart: unless-stopped
-    environment:
-      DB_VENDOR: MYSQL
-      DB_ADDR: db
-      DB_DATABASE: keycloak
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASS}    
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
-    ports:
-      #- 9650:8080
-      - 9650:8443
-    depends_on:
-      - db
-    networks:
-      - web
-      - internal
-  # dms:
-  #   container_name: dms
-  #   image: logicaldoc/logicaldoc-ce
-  #   volumes:
-  #   - ${PWD}/dms/logicaldoc-conf:/opt/logicaldoc/conf'
-  #   - ${PWD}/dms/logicaldoc-repo:/opt/logicaldoc/repository'
-  #   command: ["./wait-for-it.sh", "db:3306", "-t", "30", "--", "/opt/logicaldoc/start-logicaldoc.sh", "run"]
-  #   depends_on: 
-  #     - db
-  #   ports:
-  #     - 9100:8080
+  # keycloak:
+  #   container_name: keycloak
+  #   image: quay.io/keycloak/keycloak:15.0.2
+  #   restart: unless-stopped
   #   environment:
-  #     - DB_HOST=db
-  #     - DB_ENGINE=mysql
-  #     - DB_NAME=${LDOC_DB}
-  #     - MYSQL_USER=${DB_USER}
-  #     - MYSQL_PASSWORD=${DB_PASS}
-  #     - LDOC_MEMORY=2000
+  #     DB_VENDOR: MYSQL
+  #     DB_ADDR: db
+  #     DB_DATABASE: keycloak
+  #     DB_USER: ${DB_USER}
+  #     DB_PASSWORD: ${DB_PASS}    
+  #     KEYCLOAK_USER: admin
+  #     KEYCLOAK_PASSWORD: admin
+  #   ports:
+  #     #- 9650:8080
+  #     - 9650:8443
+  #   depends_on:
+  #     - db
   #   networks:
   #     - web
   #     - internal
@@ -89,6 +68,7 @@ services:
       - 8098:8098
     volumes:
       - ${PWD}/log:/log
+      - /mnt/extra_storage/ona_data:/ona_data
     environment:
       - DEBUG=${DEBUG}
       - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
@@ -108,6 +88,7 @@ services:
       - RATE_TYPE=${RATE_TYPE}
       - RATE_ENABLED=${RATE_ENABLED}
       - MAX_REQUESTS=${MAX_REQUESTS}
+      - OUTPUT_PATH=${OUTPUT_PATH}
     depends_on:
       - db
     networks:
