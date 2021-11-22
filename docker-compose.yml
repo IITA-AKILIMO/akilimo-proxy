@@ -95,6 +95,39 @@ services:
       - web
       - internal
 
+  akilimo-api-dev:
+    container_name: akilimo-api-dev
+    image: iita/akilimo-api:${API_VERSION_TAG}
+    restart: on-failure
+    ports:
+      - 8099:8098
+    volumes:
+      - ${PWD}/log:/log
+    environment:
+      - DEBUG=${DEBUG}
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      - DB_URL=${DB_URL_TEST}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - SMS_USER=${SMS_USER}
+      - SMS_PASS=${SMS_PASS}
+      - SMS_TOKEN=${SMS_TOKEN}
+      - PLUMBER_BASE=${PLUMBER_BASE}
+      - COMPUTE_NG=${COMPUTE_NG}
+      - COMPUTE_TZ=${COMPUTE_TZ}
+      - VERIFY_CERT=${VERIFY_CERT}
+      - TZS_USD_RATE=${TZS_USD}
+      - NGN_USD=${NGN_USD}
+      - KES_USD=${KES_USD}
+      - RATE_TYPE=${RATE_TYPE}
+      - RATE_ENABLED=${RATE_ENABLED}
+      - MAX_REQUESTS=${MAX_REQUESTS}
+    depends_on:
+      - db
+    networks:
+      - web
+      - internal
+      
   akilimo-migration:
     container_name: akilimo-migration
     image: iita/akilimo-migration:${API_VERSION_TAG}
@@ -111,6 +144,23 @@ services:
     networks:
       - web
       - internal
+
+  akilimo-migration-dev:
+    container_name: akilimo-migration-dev
+    image: iita/akilimo-migration:${API_VERSION_TAG}
+    restart: on-failure
+    volumes:
+      - ${PWD}/log:/log
+    environment:
+      - DEBUG=${DEBUG}
+      - DB_URL=${DB_URL_TEST}
+      - DB_USER=${DB_ROOT_USER}
+      - DB_PASS=${DB_ROOT_PASS}
+    depends_on:
+      - db
+    networks:
+      - web
+      - internal      
 #  compute-prod:
 #    container_name: compute-prod
 #    image: iita/akilimo-compute:${COMPUTE_PRODUCTION_TAG}
