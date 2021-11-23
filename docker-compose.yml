@@ -94,6 +94,23 @@ services:
     networks:
       - web
       - internal
+      
+  akilimo-migration:
+    container_name: akilimo-migration
+    image: iita/akilimo-migration:${API_VERSION_TAG}
+    restart: on-failure
+    volumes:
+      - ${PWD}/log:/log
+    environment:
+      - DEBUG=${DEBUG}
+      - DB_URL=${DB_URL}
+      - DB_USER=${DB_ROOT_USER}
+      - DB_PASS=${DB_ROOT_PASS}
+    depends_on:
+      - db
+    networks:
+      - web
+      - internal
 
   akilimo-api-dev:
     container_name: akilimo-api-dev
@@ -127,27 +144,10 @@ services:
     networks:
       - web
       - internal
-      
-  akilimo-migration:
-    container_name: akilimo-migration
-    image: iita/akilimo-migration:${API_VERSION_TAG}
-    restart: on-failure
-    volumes:
-      - ${PWD}/log:/log
-    environment:
-      - DEBUG=${DEBUG}
-      - DB_URL=${DB_URL}
-      - DB_USER=${DB_ROOT_USER}
-      - DB_PASS=${DB_ROOT_PASS}
-    depends_on:
-      - db
-    networks:
-      - web
-      - internal
-
+            
   akilimo-migration-dev:
     container_name: akilimo-migration-dev
-    image: iita/akilimo-migration:${API_VERSION_TAG}
+    image: iita/akilimo-api-migration:${API_VERSION_TAG}
     restart: on-failure
     volumes:
       - ${PWD}/log:/log
