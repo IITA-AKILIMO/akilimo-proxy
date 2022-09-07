@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./database-backup.sh && ./archive-sql.sh && ./gbk.sh
+/home/akilimo/services/proxy-tool/database-backup.sh && /home/akilimo/services/proxy-tool/archive-sql.sh && /home/akilimo/services/proxy-tool/gbk.sh
