@@ -60,7 +60,7 @@ services:
   #     - web
   #     - internal
 
-  akilimo-api:
+  akilimo:
     container_name: akilimo-api
     image: iita/akilimo-api:${API_VERSION_TAG}
     restart: on-failure
@@ -96,7 +96,7 @@ services:
       - web
       - internal
       
-  akilimo-migration:
+  migration:
     container_name: akilimo-migration
     image: iita/akilimo-api-migration:${API_VERSION_TAG}
     restart: on-failure
