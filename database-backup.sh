@@ -22,7 +22,7 @@ fi
 
 timestamp=$(date +%Y%m%d%H%M%S)
 
-filename="${timestamp}-${DB_NAME}.sql"
+filename="${timestamp}-${DB_LIST}.sql"
 
 docker exec db /usr/bin/mysqldump --no-tablespaces -u "${DB_USERNAME}" --password="${DB_PASSWORD}" --databases $DB_LIST >"$filename"
 
