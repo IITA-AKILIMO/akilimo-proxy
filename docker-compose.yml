@@ -29,6 +29,8 @@ services:
       - ${PWD}/mysql-init-files:/docker-entrypoint-initdb.d
       - ${PWD}/db_data:/var/lib/mysql
     restart: unless-stopped
+    ports:
+      - 3306:3306
     environment:
       MYSQL_ROOT_HOST: "%"
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
