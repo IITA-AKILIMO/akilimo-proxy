@@ -15,15 +15,15 @@ else
 fi
 
 if [ -z "$DB_LIST" ]; then
-  read -rp "Enter database name: " DB_NAME
+  read -rp "Enter database name: " DB_LIST
 else
-  DB_NAME=$DB_LIST
+  DB_LIST=$DB_LIST
 fi
 
 timestamp=$(date +%Y%m%d%H%M%S)
 
 filename="${timestamp}-${DB_NAME}.sql"
 
-docker exec db /usr/bin/mysqldump --no-tablespaces -u "${DB_USERNAME}" --password="${DB_PASSWORD}" --databases "${DB_NAME}" >"$filename"
+docker exec db /usr/bin/mysqldump --no-tablespaces -u "${DB_USERNAME}" --password="${DB_PASSWORD}" --databases $DB_LIST >"$filename"
 
 sed -i "$filename" -e 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g'
