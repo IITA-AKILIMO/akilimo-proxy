@@ -1,37 +1,29 @@
 #!/bin/bash
 
+set -o allexport; source /home/akilimo/services/proxy-tool/.env; set +o allexport
 
-while getopts u:p:d: flag
-do
-    case "${flag}" in
-        u) username=${OPTARG};;
-        p) password=${OPTARG};;
-        d) database=${OPTARG};;
-    esac
-done
-
-if [ -z "$username" ]; then
-    echo "Please provide database username"
-    exit 1;
+if [ -z "$DB_USER" ]; then
+  read -rp "Enter database user: " DB_USERNAME
+else
+  DB_USERNAME="$DB_USER"
 fi
 
-if [ -z "$password" ]; then
-    echo "Please provide database password"
-    exit 1;
+if [ -z "$DB_PASS" ]; then
+  read -rp "Enter database password: " DB_PASSWORD
+else
+  DB_PASSWORD="$DB_PASS"
 fi
 
-if [ -z "$database" ]; then
-    echo "Please provide database name"
-    exit 1;
+if [ -z "$DB_LIST" ]; then
+  read -rp "Enter database name: " DB_NAME
+else
+  DB_NAME="$DB_LIST"
 fi
-
 
 timestamp=$(date +%Y%m%d%H%M%S)
 
-filename="${timestamp}-${database}.sql"
+filename="${timestamp}-${DB_NAME}.sql"
 
-echo "Processing backu for ${database} with filename ${filename}"
-
-docker exec db /usr/bin/mysqldump --no-tablespaces -u "${DB_USERNAME}" --password="${DB_PASSWORD}" "${DB_NAME}" >"$filename"
+docker exec db /usr/bin/mysqldump --no-tablespaces -u "${DB_USERNAME}" --password="${DB_PASSWORD}" --databases "${DB_NAME}" >"$filename"
 
 sed -i "$filename" -e 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g'
