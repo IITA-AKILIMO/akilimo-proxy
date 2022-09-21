@@ -17,7 +17,7 @@ fi
 if [ -z "$DB_LIST" ]; then
   read -rp "Enter database name: " DB_NAME
 else
-  DB_NAME="$DB_LIST"
+  DB_NAME=$DB_LIST
 fi
 
 timestamp=$(date +%Y%m%d%H%M%S)
