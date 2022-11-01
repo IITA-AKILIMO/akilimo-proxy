@@ -10,6 +10,6 @@ GRANT ALL PRIVILEGES ON akilimo_db_test.* TO 'akilimo'@'%';
 GRANT ALL PRIVILEGES ON akilimo_dms.* TO 'akilimo'@'%';
 GRANT ALL PRIVILEGES ON keycloak.* TO 'akilimo'@'%';
 
-DROP SCHEMA `akilimo_site`;
-DROP SCHEMA  `akilimo_db_test`;
+#DROP SCHEMA  `akilimo_db_test`;
 DROP SCHEMA `keycloak`;
+DROP SCHEMA `akilimo_dms`;
