@@ -24,6 +24,6 @@ timestamp=$(date +%Y%m%d%H%M%S)
 
 filename="${timestamp}-${DB_LIST}.sql"
 
-docker exec db /usr/bin/mysqldump --no-tablespaces -u "${DB_USERNAME}" --password="${DB_PASSWORD}" --databases $DB_LIST >"$filename"
+docker exec maria /usr/bin/mysqldump --no-tablespaces -u "${DB_USERNAME}" --password="${DB_PASSWORD}" --databases $DB_LIST >"$filename"
 
 sed -i "$filename" -e 's/utf8mb4_0900_ai_ci/utf8mb4_unicode_ci/g'
